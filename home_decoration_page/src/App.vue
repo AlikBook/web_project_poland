@@ -27,7 +27,7 @@
             quantity_available: 3,
             price: 100,
             quantity_cart: 0,
-            category: "Beds",
+            category: "Storage",
           },
           {
             id: 1,
@@ -37,8 +37,17 @@
             quantity_available: 3,
             price: 50,
             quantity_cart: 0,
+            category: "Storage",
+          },{
+            id: 2,
+            product_name: "Test Bed",
+            description: "This is a very good bed",
+            img: "../imgs/product_images/bed1_product.avif",
+            quantity_available: 4,
+            price: 75,
+            quantity_cart: 0,
             category: "Home",
-          }
+          },
         ],
         cart_products:[],
         categories:[
