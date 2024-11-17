@@ -1,7 +1,7 @@
 <template>
     <div class="Storage_page">
         <div>
-            <input type="text" name="" id="" placeholder="What are you looking for ?">
+            <input type="text" name="" id="" placeholder="What are you looking fors ?">
             <button><font-awesome-icon :icon="['fas', 'magnifying-glass']" /></button>
         </div>
 
