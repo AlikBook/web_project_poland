@@ -2,7 +2,12 @@
   <div class="main_product_section">
     <h2>Explore our catalog</h2>
     <ul class="list_products">
-      <li class="product" v-for="item in products" :key="item.id" v-show="item.category===Page_category">
+      <li 
+        class="product" 
+        v-for="item in products" 
+        :key="item.id" 
+        v-show="item.category === Page_category"
+      >
         <Product 
           :product="item"
           @product-clicked="viewProduct"
@@ -17,27 +22,23 @@
 import Product from './Product.vue';
 
 export default {
-name: "Catalog_product",
-components: {
-  Product,
-  
-},
-data(){
-  return{
-  }
-},
-props: {
-  add_product_to_cart: Function,
-  products: Array,
-  Page_category: String,
-},
-methods: {
-  viewProduct(id) {
-    this.$router.push(`/product/${id}`);
+  name: "Catalog_product",
+  components: {
+    Product,
   },
-},
+  props: {
+    add_product_to_cart: Function,
+    products: Array,
+    Page_category: String,
+  },
+  methods: {
+    viewProduct(id) {
+      this.$router.push(`/product/${id}`);
+    },
+  },
 };
 </script>
+
 
 
 <style scoped>
