@@ -1,10 +1,6 @@
 <template>
     <div class="Storage_page">
-        <div>
-            <input type="text" name="" id="" placeholder="What are you looking for ?">
-            <button><font-awesome-icon :icon="['fas', 'magnifying-glass']" /></button>
-        </div>
-
+        
         <Catalog_product :add_product_to_cart="add_product_to_cart" :products="products" :Page_category="Page_category" />
 
     </div>
@@ -31,3 +27,7 @@
     }
   };
 </script>
+
+<style>
+
+</style>
