@@ -2,7 +2,7 @@
     <div class="Search">
             <input v-model="search_text" type="text" name="" id="" placeholder="What are you looking for ?">
             <button class="Search_button" @click="emit_search"><font-awesome-icon :icon="['fas', 'magnifying-glass']" /></button>
-            <button class="Search_Reset">Reset</button>
+            <button class="Search_Reset" @click="reset_product_list">Reset</button>
     </div>
 </template>
 <style scoped>
@@ -25,21 +25,22 @@
 
     }
 
-    .Search input[type="text"]:focus{
-        border: none;
-    }
+    
     .Search_button{
         width: 10%;
         height: 50%;
         border: none;
         border-radius: 0 10px 10px 0;
+        cursor: pointer;
     }
     .Search_Reset{
         width: 60px;
         margin-left: 20px;
         height: 50%;
         border-radius: 20px;
-        border: none
+        border: none;
+        cursor: pointer;
+        
     }
 </style>
 <script>
@@ -59,8 +60,13 @@
         emit_search(){
             this.saved_search_text = this.search_text;
             this.$emit("search", this.saved_search_text)
-            this.search_text = ""
+           
             this.saved_search_text = ""
+        },
+        reset_product_list(){
+            this.search_text = "";
+            this.$emit("reset_list")
+
         }
     }
   };

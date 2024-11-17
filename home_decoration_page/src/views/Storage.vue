@@ -1,6 +1,6 @@
 <template>
   <div class="Storage_page">
-    <Search_bar @search="filterProducts" />
+    <Search_bar @search="filterProducts" @reset_list="filteredProducts=products"/>
     <Catalog_product 
       :add_product_to_cart="add_product_to_cart" 
       :products="filteredProducts" 
@@ -52,6 +52,7 @@ export default {
         );
       });
     },
+
   },
 };
 </script>
