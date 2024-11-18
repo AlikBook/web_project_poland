@@ -1,5 +1,10 @@
 <template>
   <div class="Storage_page">
+    <div class="banner">
+      <h1>Storage</h1>
+      <p>Organize your space effortlessly with our versatile storage solutions. From sleek shelves to practical cabinets, find everything you need to keep your home tidy and stylish.</p>
+    </div>
+    
     <SearchableCatalog
       :add_product_to_cart="add_product_to_cart"
       :products="products"
@@ -30,6 +35,19 @@ export default {
 
 
 
-<style>
+<style scoped>
 
+.Storage_page{
+  min-height: 400px;
+}
+
+.banner{
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.banner h1{
+  color: #243E36;
+}
 </style>

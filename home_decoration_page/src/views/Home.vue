@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-  
+    <h2 class="Home_catalog">Explore our catalog</h2>
     <Catalog_product :add_product_to_cart="add_product_to_cart" :products="products" :Page_category="Page_category" />
   </template>
   
@@ -169,6 +169,12 @@
 
 .category:hover img {
     transform: scale(1.1); 
+}
+
+.Home_catalog{
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 </style>

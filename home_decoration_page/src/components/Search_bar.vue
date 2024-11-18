@@ -1,9 +1,13 @@
 <template>
-    <div class="Search">
-            <input v-model="search_text" type="text" name="" id="" placeholder="What are you looking for ?">
-            <button class="Search_button" @click="emit_search"><font-awesome-icon :icon="['fas', 'magnifying-glass']" /></button>
+    <div class="Search_container">
+      <h3>Find What You Need</h3>
+      <div class="Search">
+            <input @keydown.enter="emit_search" v-model="search_text" type="text" name="" id="" placeholder="What are you looking for ?">
+            <button class="Search_button" @click="emit_search" ><font-awesome-icon :icon="['fas', 'magnifying-glass']" /></button>
             <button class="Search_Reset" @click="reset_product_list">Reset</button>
+      </div>
     </div>
+    
 </template>
 
 <script>
@@ -36,8 +40,18 @@
 </script>
 
 <style scoped>
+    .Search_container{
+      background-color: gray;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .Search_container h3{
+      padding: 10px;
+    }
+
     .Search{
-        background-color: gray;
         width: 100%;
         height: 60px;
         display: flex;

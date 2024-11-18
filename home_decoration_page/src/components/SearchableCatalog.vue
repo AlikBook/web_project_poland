@@ -30,7 +30,7 @@
     data() {
       return {
         text_to_search: "",
-        filteredProducts: this.products,
+        filteredProducts: this.products.filter(item => item.category === this.Page_category),
       };
     },
     methods: {
