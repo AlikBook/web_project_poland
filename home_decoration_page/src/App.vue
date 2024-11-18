@@ -57,8 +57,7 @@
           "Storage",
           "Home",
         ],
-        filteredProducts: this.products, 
-        text_to_search: "", 
+        
       };
     },
     methods: {
@@ -96,54 +95,44 @@
           item.quantity_cart=0;
           this.cart_products.splice(item,1);
       },
-      filterProducts(searchText) {
-      this.text_to_search = searchText;
-      const search = searchText.toLowerCase();
-
-      this.filteredProducts = this.products.filter(item => {
-        return (
-          !search || 
-          item.product_name.toLowerCase().includes(search) || 
-          item.description.toLowerCase().includes(search)
-        );
-      });
-    },
+      
 
     },
     computed: {
-        viewProps() {
-            switch (this.$route.name) {
-                case 'Storage':
-                  return{
+      viewProps() {
+        const sharedProductProps = {
+            products: this.products,
+            add_product_to_cart: this.add_product_to_cart,
+        };
+
+        switch (this.$route.name) {
+            case 'Storage':
+            case 'Furniture':
+            case 'Beds':
+            case 'Decoration':
+                return sharedProductProps;
+
+            case 'Home':
+                return {
                     products: this.products,
-                    text_to_search: this.text_to_search, 
-                    filteredProducts : this.filteredProducts,
-                    filterProducts: this.filterProducts,
                     add_product_to_cart: this.add_product_to_cart,
-                  }
-                case 'Furniture':
-                case 'Beds':
-                case 'Decoration':
-                case 'Home':
-                    return {
-                      products: this.products,
-                      add_product_to_cart: this.add_product_to_cart,
+                };
 
-                    };
-                case 'Cart':
-                    return{
-                        cart_products: this.cart_products,
-                        totalPrice: this.totalPrice,
-                        number_Cart_Items :this.number_Cart_Items,
+            case 'Cart':
+                return {
+                    cart_products: this.cart_products,
+                    totalPrice: this.totalPrice,
+                    number_Cart_Items: this.number_Cart_Items,
+                    remove_one_unit_cart_product: this.remove_one_unit_cart_product,
+                    remove_cart_product: this.remove_cart_product,
+                    add_product_to_cart: this.add_product_to_cart,
+                };
 
-                        add_product_to_cart: this.add_product_to_cart,
-                        remove_one_unit_cart_product: this.remove_one_unit_cart_product,
-                        remove_cart_product: this.remove_cart_product,
-                    }
-                default:
-                return {};
-            }
+            default:
+                return {
+                };
         }
+      }
     }
   }
   </script>

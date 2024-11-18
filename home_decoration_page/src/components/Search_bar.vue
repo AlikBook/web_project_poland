@@ -5,6 +5,36 @@
             <button class="Search_Reset" @click="reset_product_list">Reset</button>
     </div>
 </template>
+
+<script>
+  
+  export default {
+    name: "SearchBar",
+    props: {
+      products: Array,
+    },
+    data(){
+      return{
+        search_text:"",
+        saved_search_text:"",
+      }
+    },
+    methods:{
+        emit_search(){
+            this.saved_search_text = this.search_text;
+            this.$emit("search", this.saved_search_text)
+           
+            this.saved_search_text = ""
+        },
+        reset_product_list(){
+            this.search_text = "";
+            this.$emit("reset_list")
+
+        }
+    }
+  };
+</script>
+
 <style scoped>
     .Search{
         background-color: gray;
@@ -43,31 +73,3 @@
         
     }
 </style>
-<script>
-  
-  export default {
-    name: "Storage",
-    props: {
-      products: Array,
-    },
-    data(){
-      return{
-        search_text:"",
-        saved_search_text:"",
-      }
-    },
-    methods:{
-        emit_search(){
-            this.saved_search_text = this.search_text;
-            this.$emit("search", this.saved_search_text)
-           
-            this.saved_search_text = ""
-        },
-        reset_product_list(){
-            this.search_text = "";
-            this.$emit("reset_list")
-
-        }
-    }
-  };
-</script>
