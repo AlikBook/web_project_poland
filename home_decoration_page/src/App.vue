@@ -57,6 +57,8 @@
           "Storage",
           "Home",
         ],
+        filteredProducts: this.products, 
+        text_to_search: "", 
       };
     },
     methods: {
@@ -94,6 +96,18 @@
           item.quantity_cart=0;
           this.cart_products.splice(item,1);
       },
+      filterProducts(searchText) {
+      this.text_to_search = searchText;
+      const search = searchText.toLowerCase();
+
+      this.filteredProducts = this.products.filter(item => {
+        return (
+          !search || 
+          item.product_name.toLowerCase().includes(search) || 
+          item.description.toLowerCase().includes(search)
+        );
+      });
+    },
 
     },
     computed: {
@@ -102,6 +116,9 @@
                 case 'Storage':
                   return{
                     products: this.products,
+                    text_to_search: this.text_to_search, 
+                    filteredProducts : this.filteredProducts,
+                    filterProducts: this.filterProducts,
                     add_product_to_cart: this.add_product_to_cart,
                   }
                 case 'Furniture':

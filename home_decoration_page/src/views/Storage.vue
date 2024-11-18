@@ -22,37 +22,23 @@ export default {
   props: {
     add_product_to_cart: Function,
     products: Array,
+    filteredProducts: Array,
+    filterProducts:Function,
+    text_to_search: String, 
+
   },
   data() {
     return {
       Page_category: "Storage",
-      text_to_search: "", 
-      filteredProducts: this.products, 
     };
   },
   watch: {
-    
     products: {
       handler() {
         this.filterProducts(this.text_to_search);
       },
       immediate: true,
     },
-  },
-  methods: {
-    filterProducts(searchText) {
-      this.text_to_search = searchText;
-      const search = searchText.toLowerCase();
-
-      this.filteredProducts = this.products.filter(item => {
-        return (
-          !search || 
-          item.product_name.toLowerCase().includes(search) || 
-          item.description.toLowerCase().includes(search)
-        );
-      });
-    },
-
   },
 };
 </script>
