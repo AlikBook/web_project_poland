@@ -1,6 +1,6 @@
 <template>
   <div class="main_product_section">
-    <h2>Explore our catalog</h2>
+    
     <ul class="list_products">
       <li 
         class="product" 
@@ -15,6 +15,8 @@
         <button @click="add_product_to_cart(item)">Add to cart</button>
       </li>
     </ul>
+    <p  v-if="products.length===0">There are no products available</p>
+
   </div>
 </template>
 
