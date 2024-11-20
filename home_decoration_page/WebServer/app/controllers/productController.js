@@ -1,64 +1,124 @@
 const db = require("../models");
 const Product = db.products;
+const Op = db.Sequelize.Op;
 
-// Controller to fetch all products
-exports.getAllProducts = async (req, res) => {
+// Create and Save a new Product
+exports.create = async (req, res) => {
   try {
-    const products = await Product.findAll();
-    res.status(200).json(products);
-  } catch (error) {
-    res.status(500).json({ message: error.message || "Error occurred while retrieving products." });
+    // Validate request
+    if (!req.body.product_name || !req.body.price) {
+      return res.status(400).json({ message: "Product name and price are required!" });
+    }
+
+    // Create a Product
+    const product = {
+      product_name: req.body.product_name,
+      description: req.body.description,
+      img: req.body.img,
+      quantity_available: req.body.quantity_available,
+      price: req.body.price,
+      quantity_cart: req.body.quantity_cart || 0,
+      category: req.body.category,
+    };
+
+    // Save Product in the database
+    const data = await Product.create(product);
+    res.status(201).json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message || "Error occurred while creating the Product." });
   }
 };
 
-// Controller to fetch a single product by ID
-exports.getProductById = async (req, res) => {
+// Retrieve all Products from the database.
+exports.findAll = async (req, res) => {
+  try {
+    const title = req.query.title;
+    const condition = title ? { product_name: { [Op.like]: `%${title}%` } } : null;
+
+    const data = await Product.findAll({ where: condition });
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message || "Error occurred while retrieving Products." });
+  }
+};
+
+// Find a single Product with an ID
+exports.findOne = async (req, res) => {
   try {
     const id = req.params.id;
-    const product = await Product.findByPk(id);
-    if (!product) {
+    const data = await Product.findByPk(id);
+
+    if (!data) {
       return res.status(404).json({ message: `Product with ID ${id} not found.` });
     }
-    res.status(200).json(product);
-  } catch (error) {
-    res.status(500).json({ message: error.message || "Error occurred while retrieving the product." });
+
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message || "Error occurred while retrieving the Product." });
   }
 };
 
-// Controller to create a new product
-exports.createProduct = async (req, res) => {
-  try {
-    const product = await Product.create(req.body);
-    res.status(201).json(product);
-  } catch (error) {
-    res.status(500).json({ message: error.message || "Error occurred while creating the product." });
-  }
-};
-
-// Controller to update a product by ID
-exports.updateProduct = async (req, res) => {
+// Update a Product by the ID in the request
+exports.update = async (req, res) => {
   try {
     const id = req.params.id;
-    const updated = await Product.update(req.body, { where: { id } });
-    if (updated[0] === 0) {
+    const [updated] = await Product.update(req.body, { where: { id } });
+
+    if (updated === 0) {
       return res.status(404).json({ message: `Product with ID ${id} not found or no changes made.` });
     }
+
     res.status(200).json({ message: "Product updated successfully." });
-  } catch (error) {
-    res.status(500).json({ message: error.message || "Error occurred while updating the product." });
+  } catch (err) {
+    res.status(500).json({ message: err.message || "Error occurred while updating the Product." });
   }
 };
 
-// Controller to delete a product by ID
-exports.deleteProduct = async (req, res) => {
+// Delete a Product with the specified ID in the request
+exports.delete = async (req, res) => {
   try {
     const id = req.params.id;
     const deleted = await Product.destroy({ where: { id } });
+
     if (deleted === 0) {
       return res.status(404).json({ message: `Product with ID ${id} not found.` });
     }
+
     res.status(200).json({ message: "Product deleted successfully." });
-  } catch (error) {
-    res.status(500).json({ message: error.message || "Error occurred while deleting the product." });
+  } catch (err) {
+    res.status(500).json({ message: err.message || "Error occurred while deleting the Product." });
+  }
+};
+
+// Delete all Products from the database
+exports.deleteAll = async (req, res) => {
+  try {
+    const deleted = await Product.destroy({ where: {}, truncate: true });
+
+    if (deleted === 0) {
+      return res.status(404).json({ message: "No Products found to delete." });
+    }
+
+    res.status(200).json({ message: "All Products deleted successfully." });
+  } catch (err) {
+    res.status(500).json({ message: err.message || "Error occurred while deleting all Products." });
+  }
+};
+
+// Find Products by title
+exports.findByTitle = async (req, res) => {
+  try {
+    const title = req.params.title;
+    const data = await Product.findAll({
+      where: { product_name: { [Op.like]: `%${title}%` } },
+    });
+
+    if (data.length === 0) {
+      return res.status(404).json({ message: `No Products found with title "${title}".` });
+    }
+
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message || "Error occurred while searching for Products by title." });
   }
 };

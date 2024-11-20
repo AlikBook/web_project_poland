@@ -7,6 +7,7 @@
   <script>
   import User_menu from "./components/User_menu.vue";
   import Footer_User from "./components/Footer_User.vue";
+  import ProductService from "./services/ProductService";
   
   export default {
     name: "App",
@@ -18,37 +19,7 @@
       return {
         number_Cart_Items: 0,
         totalPrice: 0.0,
-        products: [
-          {
-            id: 0,
-            product_name: "Platform Bed",
-            description: "This is a good bed",
-            img: "../imgs/product_images/bed1_product.avif",
-            quantity_available: 3,
-            price: 100,
-            quantity_cart: 0,
-            category: "Storage",
-          },
-          {
-            id: 1,
-            product_name: "Canopy Bed",
-            description: "This is a very good bed",
-            img: "../imgs/product_images/bed1_product.avif",
-            quantity_available: 3,
-            price: 50,
-            quantity_cart: 0,
-            category: "Storage",
-          },{
-            id: 2,
-            product_name: "Test Bed",
-            description: "This is a very good bed",
-            img: "../imgs/product_images/bed1_product.avif",
-            quantity_available: 4,
-            price: 75,
-            quantity_cart: 0,
-            category: "Home",
-          },
-        ],
+        products: [], // Will fetch dynamically from the server
         cart_products:[],
         categories:[
           "Beds",
@@ -61,6 +32,15 @@
       };
     },
     methods: {
+      // Fetch products from backend
+    async fetchProducts() {
+      try {
+        this.products = await ProductService.getAllProducts();
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    },
+
       add_product_to_cart(item) {
         const existingProduct = this.cart_products.find((product) => product.id === item.id);
         if(item.quantity_available===item.quantity_cart){
@@ -129,11 +109,13 @@
                 };
 
             default:
-                return {
-                };
+                return {};
         }
       }
-    }
+    },
+    async mounted() {
+    await this.fetchProducts(); // Load products when the app loads
+  },
   }
   </script>
   
