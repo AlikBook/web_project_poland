@@ -23,8 +23,9 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// Import and initialize models
-db.events = require("./eventModel.js")(sequelize, Sequelize);
+
+// Add the Product model
+db.products = require("./productModel.js")(sequelize, Sequelize);
 
 // Export the db object
 module.exports = db;
