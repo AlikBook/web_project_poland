@@ -20,8 +20,8 @@ db.sequelize
     console.error("Error syncing database:", err.message);
   });
 
-// Routes
-app.use("/api/products", productRoutes);
+// Import and use routes
+require("./app/routes/productRoutes")(app);
 
 // Simple route for testing
 app.get("/", (req, res) => {
