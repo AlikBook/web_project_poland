@@ -17,7 +17,7 @@ db.sequelize
     console.log("Database synchronized successfully!");
   })
   .catch((err) => {
-    console.error("Error syncing database:", err.message);
+    console.error("Error syncing database:", err); // Log full error
   });
 
 // Import and use routes
