@@ -155,9 +155,6 @@
 
 .items_menu:hover{
     background: white;
-    
-    
-    
 } 
 
 .cart{
@@ -167,21 +164,28 @@
 
 }
 
-@media (max-width: 600px){
+@media (max-width: 800px){
     .menu{
         flex-direction: column;
         align-items: center;
         height: 100px;
     }
+    .space{
+      height: 100px;
+    }
     
     .menu_pages__links, .menu_right_section ul {
         justify-content:center;
-        gap: 20px;
+        gap: 15px;
     }
 
     .right_section__buttons{
         display: flex;
         gap: 5px;
+    }
+    .routers{
+      padding-left: 5px;
+      padding-right: 5px;
     }
 }
 </style>

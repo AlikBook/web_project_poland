@@ -8,7 +8,7 @@
                 <p class="category">Category: {{ product.category }}</p>
                 <h2>Price: {{ product.price }} $</h2>
                 <p class="description">Description:</p>
-                <p>{{ product.description }} Lorem ipsum dolor sit amet consectetur adipisicing elit. Non a corrupti tenetur nihil fugit pariatur voluptates nemo molestias similique dolor eum quidem, quos, beatae maxime illo voluptas eos quae asperiores.</p>
+                <p>{{ product.description }} </p>
                 <button @click="addToCart">Add to Cart</button>
             </div>
         </div>
@@ -35,8 +35,8 @@
 }
 
 .product_container img{
-    width: 400px;
-    height: 400px;
+    max-width: 400px;
+    height: 100%;
     border: 1px solid gray;
 }
 
@@ -74,7 +74,15 @@
 
 
 hr{
-    width: 400px;
+    width: 100%;
+}
+
+@media (max-width: 800px){
+  .product_container{
+    flex-direction: column;
+    align-items: center;
+  }
+
 }
 </style>
 
