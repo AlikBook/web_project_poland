@@ -177,4 +177,20 @@
   margin-bottom: 30px;
 }
 
+@media (max-width: 600px){
+  .main_banner{
+    flex-direction: column;
+  }
+  .main_banner img{
+    width: 100%;
+  }
+  .main_categories_section{
+    width: 100%;
+    padding: 0;
+  }
+  
+  .main_categories_section h2{
+    padding: 0;
+  }
+}
 </style>

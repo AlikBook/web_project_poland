@@ -98,4 +98,23 @@ footer{
     color: white;
     text-decoration: none;
 }
+
+@media (max-width: 800px){
+    footer{
+        flex-direction: column;
+        align-items: center;
+        
+    }
+    .socials{
+        margin-bottom: 60px;
+    }
+    .register_login{
+        margin: 30px;
+        width: 100%;
+        padding: 0;
+    }
+    .menu_and_socials{
+        width: 100%;
+    }
+}
 </style>

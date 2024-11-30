@@ -47,6 +47,7 @@ export default {
         align-items: start;
         padding: 20px;
         border-bottom: 2px solid gray;
+        gap: 20px;
     }
     .cart_product img{
         width: 200px;
@@ -119,5 +120,27 @@ export default {
         border-radius: 0px 10px 10px 0px;
         border-left: 1px solid white;
     }
+    @media (max-width: 800px){
+        .cart_product{
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
 
+        .add_reduce_container{
+            height: 30px;
+        }
+
+        
+        .remove_product{
+            font-size: 10px;
+            padding: 10px;
+        }
+        .button_container{
+            margin: 20px;
+            flex-direction: column;
+            align-items: center;
+        }
+
+    }
 </style>
