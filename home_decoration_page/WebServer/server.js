@@ -1,7 +1,9 @@
 const express = require("express");
 const cors = require("cors");
-const db = require("./app/models");
+const db = require("./app/models"); //Import models
+const Role=db.role; //Access the Role Model
 const productRoutes = require("./app/routes/productRoutes");
+const authRoutes = require("./app/routes/authRoutes"); // Import the routes
 
 const app = express();
 
@@ -9,10 +11,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/auth", authRoutes); // Use the routes with the "/auth" base path
+
+
+// Define the initial function to seed the roles
+function initial() {
+  Role.create({ id: 1, name: "user" });
+  Role.create({ id: 2, name: "admin" });
+}
 
 // Test database connection and sync
 db.sequelize
-  .sync({ force: false }) // Set force: true to reset database on every run
+  .sync({ force: true }) // Set force: true to reset database on every run
   .then(() => {
     console.log("Database synchronized successfully!");
   })
