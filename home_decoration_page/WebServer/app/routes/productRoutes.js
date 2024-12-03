@@ -1,40 +1,27 @@
-module.exports = function (app) {
-  const productController = require("../controllers/productController");
-  const { authJwt } = require("../middleware"); // Import authJwt middleware
+const express = require("express");
+const router = express.Router();
+const productController = require("../controllers/productController");
+const { authJwt } = require("../middleware"); // Import authentication middleware
 
-  // Test server route (public route)
-  app.get("/", (req, res) => {
-    res.json({ message: "Welcome to the Product Management API!" });
-  });
+// Public: Retrieve all products
+router.get("/", productController.findAll);
 
-  // Protected: Create a new product (authenticated users only)
-  app.post("/api/products", [authJwt.verifyToken], productController.create);
+// Public: Retrieve a single product by ID
+router.get("/:id", productController.findOne);
 
-  // Public: Retrieve all products
-  app.get("/api/products", productController.findAll);
+// Public: Search products by title
+router.get("/search/:title", productController.findByTitle);
 
-  // Public: Retrieve a single product by ID
-  app.get("/api/products/:id", productController.findOne);
+// Protected: Create a new product (authenticated users only)
+router.post("/", [authJwt.verifyToken], productController.create);
 
-  // Public: Retrieve products by title
-  app.get("/api/products/search/:title", productController.findByTitle);
+// Protected: Update a product by ID (authenticated users only)
+router.put("/:id", [authJwt.verifyToken], productController.update);
 
-  // Protected: Update a product by ID (authenticated users only)
-  app.put("/api/products/:id", [authJwt.verifyToken], productController.update);
+// Admin-only: Delete a product by ID
+router.delete("/:id", [authJwt.verifyToken, authJwt.isAdmin], productController.delete);
 
-  // Admin-only: Delete a product by ID
-  app.delete(
-    "/api/products/:id",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    productController.delete
-  );
+// Admin-only: Delete all products
+router.delete("/", [authJwt.verifyToken, authJwt.isAdmin], productController.deleteAll);
 
-  // Admin-only: Delete all products
-  app.delete(
-    "/api/products",
-    [authJwt.verifyToken, authJwt.isAdmin],
-    productController.deleteAll
-  );
-};
-
-  
+module.exports = router;
