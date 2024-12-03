@@ -22,12 +22,12 @@
           <div class="items_menu">
             {{ totalPrice }}$ <p>Total Amount</p>
           </div>
-          <div>
-            <div class="right_section__buttons">
-              <button>Login</button>
-              <button>Register</button>
-            </div>
-          </div>
+          <div class="right_section__buttons">
+          <!-- Authentication Buttons -->
+          <button v-if="!isLoggedIn" @click="goToLogin">Login</button>
+          <button v-if="!isLoggedIn" @click="goToRegister">Register</button>
+          <button v-if="isLoggedIn" @click.prevent="logout">Logout</button>
+      </div>
       </div>
     </nav>
     <div class="space">
@@ -48,7 +48,28 @@
         default: 0.0,
       },
     },
-  };
+    computed: {
+    // Check if the user is logged in
+    isLoggedIn() {
+      return !!localStorage.getItem("user"); // Returns true if a token exists
+    },
+  },
+  methods: {
+    // Redirect to login page
+    goToLogin() {
+      this.$router.push("/login"); // Navigate to Login route
+    },
+    // Redirect to register page
+    goToRegister() {
+      this.$router.push("/register"); // Navigate to Register route
+    },
+    // Handle user logout
+    logout() {
+      localStorage.removeItem("user"); // Remove token
+      this.$router.push("/login"); // Redirect to login page
+    },
+  },
+};
 </script>
   
 <style>

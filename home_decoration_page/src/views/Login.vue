@@ -1,18 +1,27 @@
 <template>
-    <div>
+    <div class="auth-container">
       <h1>Login</h1>
-      <form @submit.prevent="loginUser">
-        <input v-model="username" placeholder="Username" required />
-        <input v-model="password" type="password" placeholder="Password" required />
-        <button type="submit">Login</button>
+      <form class="auth-form" @submit.prevent="loginUser">
+        <input
+          v-model="username"
+          type="text"
+          placeholder="Username"
+          class="auth-input"
+          required
+        />
+        <input
+          v-model="password"
+          type="password"
+          placeholder="Password"
+          class="auth-input"
+          required
+        />
+        <button type="submit" class="auth-button">Login</button>
       </form>
     </div>
   </template>
   
   <script>
-  import axios from "axios";
-  import jwt_decode from "jwt-decode";
-  
   export default {
     data() {
       return {
@@ -21,29 +30,58 @@
       };
     },
     methods: {
-      async loginUser() {
-        try {
-          const response = await axios.post("http://localhost:5000/auth/login", {
-            username: this.username,
-            password: this.password,
-          });
-          const token = response.data.accessToken;
-  
-          // Save token in localStorage
-          localStorage.setItem("user", token);
-  
-          // Decode token to get user details
-          const decoded = jwt_decode(token);
-          console.log("User Info:", decoded);
-  
-          // Redirect to home or dashboard
-          this.$router.push("/home");
-        } catch (error) {
-          console.error(error.response.data.message);
-          alert("Login failed: " + error.response.data.message);
-        }
+      loginUser() {
+        // Logic for login
+        console.log("Login attempted", this.username, this.password);
       },
     },
   };
   </script>
+  
+  <style scoped>
+  .auth-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 50px auto;
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+  }
+  
+  .auth-container h1 {
+    font-size: 2rem;
+    color: #243e36;
+    margin-bottom: 20px;
+  }
+  
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .auth-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .auth-button {
+    background-color: #243e36;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .auth-button:hover {
+    background-color: white;
+    color: #243e36;
+    border: 1px solid #243e36;
+  }
+  </style>
+  
   

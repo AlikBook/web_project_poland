@@ -1,12 +1,10 @@
 <template>
-    <NavBar /> <!-- Include the navigation bar here -->>
     <User_menu :number_Cart_Items="number_Cart_Items" :totalPrice="totalPrice" />
     <router-view v-bind="viewProps"/>
     <Footer_User />
   </template>
   
   <script>
-  import NavBar from "./components/NavBar.vue"; // Import the NavBar component
   import User_menu from "./components/User_menu.vue";
   import Footer_User from "./components/Footer_User.vue";
   import ProductService from "./services/ProductService";
@@ -14,7 +12,6 @@
   export default {
     name: "App",
     components: {
-      NavBar, // Register NavBar
       User_menu,
       Footer_User,
     },
