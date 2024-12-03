@@ -1,9 +1,9 @@
 const express = require("express");
 const cors = require("cors");
-const db = require("./app/models"); //Import models
-const Role=db.role; //Access the Role Model
-const productRoutes = require("./app/routes/productRoutes");
-const authRoutes = require("./app/routes/authRoutes"); // Import the routes
+const db = require("./app/models"); // Import models
+const Role = db.role; // Access the Role model
+const authRoutes = require("./app/routes/authRoutes"); // Import auth routes
+const productRoutes = require("./app/routes/productRoutes"); // Import product routes
 
 const app = express();
 
@@ -11,27 +11,41 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Use routes
 app.use("/auth", authRoutes); // Use the routes with the "/auth" base path
+app.use("/products", productRoutes); // Use product routes
 
-
-// Define the initial function to seed the roles
-function initial() {
-  Role.create({ id: 1, name: "user" });
-  Role.create({ id: 2, name: "admin" });
+// Define the initial function to seed roles
+async function initial() {
+  try {
+    // Check if roles exist
+    const roleCount = await Role.count();
+    if (roleCount === 0) {
+      // Only seed roles if none exist
+      await Role.bulkCreate([
+        { id: 1, name: "user" },
+        { id: 2, name: "admin" },
+      ]);
+      console.log("Roles seeded successfully!");
+    } else {
+      console.log("Roles already exist. Skipping seeding.");
+    }
+  } catch (error) {
+    console.error("Error seeding roles:", error.message);
+  }
 }
 
-// Test database connection and sync
+// Test database connection and sync tables
 db.sequelize
-  .sync({ force: true }) // Set force: true to reset database on every run
+  .sync({ force: false }) // Use `force: true` if you want to reset the database every run
   .then(() => {
     console.log("Database synchronized successfully!");
+    initial(); // Seed roles after syncing database
   })
   .catch((err) => {
-    console.error("Error syncing database:", err); // Log full error
+    console.error("Error syncing database:", err.message);
   });
-
-// Import and use routes
-require("./app/routes/productRoutes")(app);
 
 // Simple route for testing
 app.get("/", (req, res) => {

@@ -1,15 +1,28 @@
-module.exports = (sequelize, Sequelize) => { 
-    const User = sequelize.define("users", { 
-    username: { 
-    type: Sequelize.STRING
-    }, 
-    email: { 
-    type: Sequelize.STRING
-    }, 
-    password: { 
-    type: Sequelize.STRING
-    } 
-    }); 
-    return User; 
-   }; 
-   
+module.exports = (sequelize, DataTypes) => {
+    const User = sequelize.define("user", {
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+    });
+  
+    User.associate = (models) => {
+      User.belongsToMany(models.Role, {
+        through: "user_roles",
+        foreignKey: "userId",
+        otherKey: "roleId",
+      });
+    };
+  
+    return User;
+  };
+  

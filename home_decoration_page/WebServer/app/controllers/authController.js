@@ -6,6 +6,7 @@ const User = db.user;
 const Role = db.role;
 
 exports.register = (req, res) => {
+  console.log("Request Body for Registration:", req.body); // Debug log
   User.create({
     username: req.body.username,
     email: req.body.email,
@@ -27,10 +28,13 @@ exports.register = (req, res) => {
       }
     })
     .catch((err) => {
+      console.error("Error during registration:", err.message); // Debug log
       res.status(500).send({ message: err.message });
     });
 };
+
 exports.signin = (req, res) => {
+  console.log("Request Body for Login:", req.body); // Debug log
   User.findOne({
     where: { username: req.body.username },
   })
@@ -71,6 +75,7 @@ exports.signin = (req, res) => {
       });
     })
     .catch((err) => {
+      console.error("Error during login:", err.message); // Debug log
       res.status(500).send({ message: err.message });
     });
 };
