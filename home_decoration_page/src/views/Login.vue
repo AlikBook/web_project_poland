@@ -39,14 +39,15 @@ export default {
           password: this.password,
         });
 
-        const { accessToken, roles, username } = response.data;
+        const { accessToken, role, username } = response.data;
 
         // Store user details in localStorage
         localStorage.setItem("user", accessToken);
-        localStorage.setItem("role", roles[0]); // Assuming roles is an array
+        localStorage.setItem("role", role); // Set role dynamically
         localStorage.setItem("userName", username);
 
         alert("Login successful!");
+        location.reload(); // Reload the page to reflect role-based UI changes
         this.$router.push("/"); // Redirect to home page
       } catch (error) {
         console.error("Login failed:", error.response?.data?.message || error.message);
