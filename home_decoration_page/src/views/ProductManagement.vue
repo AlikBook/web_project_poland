@@ -3,12 +3,12 @@
     <h1>Product Management</h1>
 
     <!-- Form to Create a New Product (Visible to Admin Only) -->
-    <div v-if="isAdmin">
+    <div >
       <form @submit.prevent="createProduct">
         <input
           type="text"
-          v-model="newProduct.name"
-          placeholder="Product Name"
+          v-model="newProduct.product_name"
+          placeholder="Product product_name"
           required
         />
         <textarea
@@ -55,7 +55,7 @@
     <ul>
       <li v-for="product in products" :key="product.id">
         <strong>ID:</strong> {{ product.id }} <br />
-        <strong>Name:</strong> {{ product.name }} <br />
+        <strong>product_name:</strong> {{ product.product_name }} <br />
         <strong>Description:</strong> {{ product.description }} <br />
         <strong>Price:</strong> ${{ product.price }} <br />
         <strong>Category:</strong> {{ product.category }} <br />
@@ -76,7 +76,7 @@
       <form @submit.prevent="updateProduct">
         <input
           type="text"
-          v-model="editingProduct.name"
+          v-model="editingProduct.product_name"
           placeholder="Product Name"
           required
         />
@@ -118,12 +118,12 @@
 import ProductService from "../services/ProductService";
 
 export default {
-  name: "ProductManagement",
+  product_name: "ProductManagement",
   data() {
     return {
       products: [],
       newProduct: {
-        name: "",
+        product_name: "",
         description: "",
         img: "",
         quantity_available: 0,
@@ -148,7 +148,7 @@ export default {
       try {
         await ProductService.createProduct(this.newProduct);
         this.newProduct = {
-          name: "",
+          product_name: "",
           description: "",
           img: "",
           quantity_available: 0,
