@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
     category: {
       type: DataTypes.STRING,
     },
+    ratings:{
+      type: DataTypes.JSON, // Store an array of ratings as JSON
+      defaultValue: [], // Default is an empty array
+    },
   });
 
   return Product;

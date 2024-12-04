@@ -122,3 +122,23 @@ exports.findByTitle = async (req, res) => {
     res.status(500).json({ message: err.message || "Error occurred while searching for Products by title." });
   }
 };
+
+// Submit a new rating
+exports.addRating = async (req, res) => {
+  try {
+    const product = await Product.findByPk(req.params.id);
+    if (!product) {
+      return res.status(404).send({ message: "Product not found" });
+    }
+
+    // Add the new rating to the existing ratings array
+    const newRating = req.body.rating; // Expected in the request body
+    product.ratings.push(newRating);
+
+    // Save the updated product
+    await product.save();
+    res.send(product);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
