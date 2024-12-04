@@ -12,11 +12,11 @@ router.get("/:id", productController.findOne);
 // Public: Search products by title
 router.get("/search/:title", productController.findByTitle);
 
-// Protected: Create a new product (authenticated users only)
-router.post("/", [authJwt.verifyToken], productController.create);
+// Admin-only: Create a new product
+router.post("/", [authJwt.verifyToken, authJwt.isAdmin], productController.create);
 
-// Protected: Update a product by ID (authenticated users only)
-router.put("/:id", [authJwt.verifyToken], productController.update);
+// Admin-only: Update a product by ID
+router.put("/:id", [authJwt.verifyToken, authJwt.isAdmin], productController.update);
 
 // Admin-only: Delete a product by ID
 router.delete("/:id", [authJwt.verifyToken, authJwt.isAdmin], productController.delete);
