@@ -210,6 +210,10 @@ hr{
     flex-direction: column;
     align-items: center;
   }
+  .product_container img{
+    max-width: 250px;
+    
+}
 
 }
 </style>
