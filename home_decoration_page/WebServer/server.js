@@ -7,6 +7,9 @@ const Role = db.role; // Access the Role model
 const authRoutes = require("./app/routes/authRoutes"); 
 const productRoutes = require("./app/routes/productRoutes");
 
+// Import the seedAdmin function
+const seedAdmin = require("./seedAdmin");
+
 const app = express();
 
 // Middleware
@@ -44,6 +47,7 @@ db.sequelize
   .then(() => {
     console.log("Database synchronized successfully!");
     initial(); // Seed roles after syncing database
+    seedAdmin();
   })
   .catch((err) => {
     console.error("Error syncing database:", err.message);
