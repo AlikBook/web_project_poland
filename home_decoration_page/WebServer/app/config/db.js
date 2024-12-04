@@ -1,6 +1,6 @@
 module.exports = {
     HOST: "localhost", 
-    USER: "", 
+    USER: "Admin", 
     PASSWORD: "Admin",
     DB: "home_decoration",
     dialect: "mysql",
