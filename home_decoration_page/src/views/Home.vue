@@ -6,7 +6,6 @@
           Transform every corner of your home with unique, stylish furniture and
           decor that bring comfort and personality to your space.
         </p>
-        <button>See More</button>
       </div>
       <img src="/imgs/main_image_home.jpg" alt="" />
     </section>
