@@ -66,11 +66,13 @@ const routes = [
         path: "/products",
         name: "ProductManagement",
         component: ProductManagement,
+        meta: { requiresAuth: true, role: "admin" }, // Restricted to admin
       },
       {
         path: "/users",
         name: "UserManagement",
         component: UserManagement,
+        meta: { requiresAuth: true, role: "admin" }, // Restricted to admin
       },
       
 ]
@@ -80,36 +82,47 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const token = localStorage.getItem("user");
-  
-    // If route requires authentication
-    if (to.matched.some((record) => record.meta.requiresAuth)) {
-      if (!token) {
-        return next("/login"); // Redirect to login if not authenticated
-      }
-      return next();
+  const token = localStorage.getItem("user");
+
+  // Decode the token to get user details
+  let user = null;
+  if (token) {
+    try {
+      user = JSON.parse(atob(token.split(".")[1]));
+    } catch (error) {
+      console.error("Invalid token:", error);
+      localStorage.removeItem("user");
+      return next("/login"); // Redirect to login if token is invalid
     }
-  
-    // If route is for guests only
-    if (to.matched.some((record) => record.meta.guest)) {
-      if (token) {
-        return next("/"); // Redirect to home if already authenticated
-      }
-      return next();
+  }
+
+  // If route requires authentication
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (!token) {
+      return next("/login"); // Redirect to login if not authenticated
     }
-  
-    // If route is for admin-only
-    if (to.matched.some((record) => record.meta.is_admin)) {
-      const user = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
-      if (user.role !== "admin") {
-        return next("/"); // Redirect non-admin users to home
-      }
-      return next();
+    return next();
+  }
+
+  // If route is for guests only
+  if (to.matched.some((record) => record.meta.guest)) {
+    if (token) {
+      return next("/"); // Redirect to home if already authenticated
     }
-  
-    next(); // Allow navigation if no guard is triggered
-  })
-  
+    return next();
+  }
+
+  // If route is for admin-only
+  if (to.matched.some((record) => record.meta.role === "admin")) {
+    if (!user || user.role !== "admin") {
+      return next("/"); // Redirect to home if not an admin
+    }
+    return next();
+  }
+
+  next(); // Allow navigation if no guard is triggered
+});
+
 export default createRouter({
   history: createWebHistory(),
   routes,

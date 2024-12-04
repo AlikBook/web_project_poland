@@ -22,8 +22,9 @@ exports.register = (req, res) => {
           });
         });
       } else {
+        // Default to role "user" (id 1)
         user.setRoles([1]).then(() => {
-          res.send({ message: "Admin registered successfully!" });
+          res.send({ message: "User registered successfully!" });
         });
       }
     })
@@ -59,20 +60,27 @@ exports.signin = (req, res) => {
         expiresIn: 86400, // 24 hours
       });
 
-      const authorities = [];
-      user.getRoles().then((roles) => {
-        for (let i = 0; i < roles.length; i++) {
-          authorities.push("ROLE_" + roles[i].name.toUpperCase());
-        }
+      // Properly declare and initialize `authorities`
+      let authorities = [];
+      user
+        .getRoles()
+        .then((roles) => {
+          for (let i = 0; i < roles.length; i++) {
+            authorities.push("ROLE_" + roles[i].name.toUpperCase());
+          }
 
-        res.status(200).send({
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          roles: authorities,
-          accessToken: token,
+          res.status(200).send({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            roles: authorities,
+            accessToken: token,
+          });
+        })
+        .catch((err) => {
+          console.error("Error fetching roles:", err.message); // Debug log
+          res.status(500).send({ message: "Error fetching user roles." });
         });
-      });
     })
     .catch((err) => {
       console.error("Error during login:", err.message); // Debug log
