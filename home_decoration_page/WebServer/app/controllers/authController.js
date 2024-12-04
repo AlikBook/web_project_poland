@@ -56,23 +56,22 @@ exports.signin = async (req, res) => {
       });
     }
 
-    // Generate token
-    const token = jwt.sign({ id: user.id }, config.secret, { expiresIn: 86400 }); // 24 hours
-
-    // Fetch roles and determine primary role
+    // Fetch roles
     const roles = await user.getRoles();
     const authorities = roles.map((role) => role.name); // Extract role names
-    const role = authorities.includes("admin") ? "admin" : "user"; // Determine main role
 
-    console.log("Roles for user:", authorities);
-    console.log("Primary role:", role);
-    // Send response
+    // Generate token with roles in the payload
+    const token = jwt.sign(
+      { id: user.id, roles: authorities }, // Include roles in the payload
+      config.secret,
+      { expiresIn: 86400 } // 24 hours
+    );
+
     res.status(200).send({
       id: user.id,
       username: user.username,
       email: user.email,
       roles: authorities, // All roles
-      role, // Primary role
       accessToken: token,
     });
   } catch (err) {
