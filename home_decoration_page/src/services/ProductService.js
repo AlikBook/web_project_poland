@@ -52,9 +52,22 @@ const deleteProduct = async (id) => {
   }
 };
 
+// Delete all products (Admin Only)
+const deleteAllProducts = async () => {
+  try {
+    const response = await axios.delete("http://localhost:5000/api/products", {
+      headers: { "x-access-token": localStorage.getItem("token") }, // Include token for admin verification
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting all products:", error);
+    throw error;
+  }
+};
 export default {
   getAllProducts,
   createProduct,
   updateProduct,
   deleteProduct,
+  deleteAllProducts,
 };
