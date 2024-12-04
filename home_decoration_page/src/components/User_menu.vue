@@ -152,6 +152,13 @@ export default {
   text-decoration: none;
 }
 
+.routers:hover, .right_section__buttons>button:hover {
+    color: #243E36;
+    background-color: white;
+    border-bottom: 1px solid #243E36;
+    cursor: pointer;
+}
+
 .right_section__buttons {
   display: flex;
   align-items: center;
