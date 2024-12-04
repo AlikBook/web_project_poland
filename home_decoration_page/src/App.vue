@@ -19,7 +19,7 @@
       return {
         number_Cart_Items: 0,
         totalPrice: 0.0,
-        products: [], // Will fetch dynamically from the server
+        products: [],
         cart_products:[],
         categories:[
           "Beds",
