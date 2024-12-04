@@ -8,7 +8,8 @@ import Cart from '../views/Cart.vue';
 import Individual_product from '../views/Individual_product.vue';
 import Registry from "../views/Registry.vue";
 import Login from "../views/Login.vue";
-
+import ProductManagement from "../views/ProductManagement.vue";
+import UserManagement from "../views/UserManagement.vue";
 
 const routes = [ 
     {
@@ -61,6 +62,16 @@ const routes = [
         component: Login,
         meta: { guest: true }, // Mark as accessible to guests only
       },
+      {
+        path: "/products",
+        name: "ProductManagement",
+        component: ProductManagement,
+      },
+      {
+        path: "/users",
+        name: "UserManagement",
+        component: UserManagement,
+      },
       
 ]
 const router = createRouter({
@@ -99,4 +110,7 @@ router.beforeEach((to, from, next) => {
     next(); // Allow navigation if no guard is triggered
   })
   
-export default router 
+export default createRouter({
+  history: createWebHistory(),
+  routes,
+});
