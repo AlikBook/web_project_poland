@@ -120,7 +120,7 @@
   </script>
   
 
-<style scoped>
+<style>
 *{
     box-sizing: border-box;
     margin: 0;

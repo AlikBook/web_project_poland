@@ -99,6 +99,29 @@ footer{
     text-decoration: none;
 }
 
+.right_section__buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.right_section__buttons button {
+  background-color: #243e36;
+  border: 1px solid #243e36;
+  color: white;
+  border-radius: 20px;
+  padding: 7px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.right_section__buttons button:hover {
+  background-color: white;
+  color: #243e36;
+  border: 1px solid #243e36;
+}
+
 @media (max-width: 800px){
     footer{
         flex-direction: column;
