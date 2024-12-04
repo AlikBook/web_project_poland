@@ -24,4 +24,6 @@ router.delete("/:id", [authJwt.verifyToken, authJwt.isAdmin], productController.
 // Admin-only: Delete all products
 router.delete("/", [authJwt.verifyToken, authJwt.isAdmin], productController.deleteAll);
 
+// Add a rating to a product
+router.post("/:id/rating", productController.addRating);
 module.exports = router;

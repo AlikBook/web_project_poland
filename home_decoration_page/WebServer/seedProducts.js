@@ -9,6 +9,7 @@ const products = [
     price: 200,
     quantity_cart: 0,
     category: "Beds",
+    ratings: [],
   },
   {
     product_name: "Modern Bed",
@@ -18,6 +19,7 @@ const products = [
     price: 300,
     quantity_cart: 0,
     category: "Beds",
+    ratings: [],
   },
 
   // Furniture
@@ -29,6 +31,7 @@ const products = [
     price: 50,
     quantity_cart: 0,
     category: "Furniture",
+    ratings: [],
   },
   {
     product_name: "Wooden Chair",
@@ -38,6 +41,7 @@ const products = [
     price: 150,
     quantity_cart: 0,
     category: "Furniture",
+    ratings: [],
   },
 
   // Decoration
@@ -49,6 +53,7 @@ const products = [
     price: 100,
     quantity_cart: 0,
     category: "Decoration",
+    ratings: [],
   },
   {
     product_name: "Elegant Vase",
@@ -58,6 +63,7 @@ const products = [
     price: 70,
     quantity_cart: 0,
     category: "Decoration",
+    ratings: [],
   },
 
   // Storage
@@ -69,6 +75,7 @@ const products = [
     price: 40,
     quantity_cart: 0,
     category: "Storage",
+    ratings: [],
   },
   {
     product_name: "Storage Box",
@@ -78,6 +85,7 @@ const products = [
     price: 120,
     quantity_cart: 0,
     category: "Storage",
+    ratings: [],
   },
 
   // Home
@@ -89,6 +97,7 @@ const products = [
     price: 200,
     quantity_cart: 0,
     category: "Home",
+    ratings: [],
   },
   {
     product_name: "Modern Couch",
@@ -98,6 +107,7 @@ const products = [
     price: 50,
     quantity_cart: 0,
     category: "Home",
+    ratings: [],
   },
   {
     product_name: "Modern Vase",
@@ -107,6 +117,7 @@ const products = [
     price: 100,
     quantity_cart: 0,
     category: "Home",
+    ratings: [],
   },
   {
     product_name: "Shelf",
@@ -116,6 +127,7 @@ const products = [
     price: 40,
     quantity_cart: 0,
     category: "Home",
+    ratings: [],
   },
 ];
 
