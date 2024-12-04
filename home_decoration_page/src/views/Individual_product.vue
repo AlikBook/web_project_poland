@@ -48,6 +48,11 @@ export default {
         console.error("Product not found");
       }
     },
+    
+    addToCart() {
+      this.$root.add_product_to_cart(this.product);
+    },
+    
   },
   watch: {
     '$root.products': {
