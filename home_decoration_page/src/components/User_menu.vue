@@ -6,12 +6,14 @@
         <router-link to="/" class="routers">Home</router-link>
 
         <!-- Admin-Specific Links -->
-        <router-link v-if="role === 'guest'" to="/products" class="routers">Product Management</router-link>
-        <router-link v-if="role === 'guest'" to="/users" class="routers">User Management</router-link>
+        <router-link v-if="role === 'admin'" to="/products" class="routers">Product Management</router-link>
+        <router-link v-if="role === 'admin'" to="/users" class="routers">User Management</router-link>
 
         <!-- User-Specific Links -->
-        <router-link v-if="role === 'guest'" to="/productlist" class="routers">Product List</router-link>
-        <router-link v-if="role === 'guest'" to="/cart" class="routers">Cart</router-link>
+        <router-link v-if="role === 'user'" to="/storage" class="routers">Storage</router-link>
+        <router-link v-if="role === 'user'" to="/furniture" class="routers">Furniture</router-link>
+        <router-link v-if="role === 'user'" to="/beds" class="routers">Beds</router-link>
+        <router-link v-if="role === 'user'" to="/decoration" class="routers">Decoration</router-link>
       </div>
     </div>
 
@@ -65,22 +67,22 @@ export default {
   },
   data() {
     const token = localStorage.getItem("user");
-  let role = "guest";
+    let role = "guest";
 
-  if (token) {
-    try {
-      const user = JSON.parse(atob(token.split(".")[1])); // Decode the token
-      role = user.role; // Assign role from token payload
-    } catch (error) {
-      console.error("Error decoding token:", error);
-      localStorage.removeItem("user");
+    if (token) {
+      try {
+        const user = JSON.parse(atob(token.split(".")[1])); // Decode the token
+        role = user.roles && user.roles.includes("admin") ? "admin" : "user"; // Determine role
+      } catch (error) {
+        console.error("Error decoding token:", error);
+        localStorage.removeItem("user");
+      }
     }
-  }
 
-  return {
-    role: role, // Set the role from the decoded token
-    userName: localStorage.getItem("userName") || "", // Get username from localStorage
-  };
+    return {
+      role: role, // Set the role based on the token
+      userName: localStorage.getItem("userName") || "", // Get username from localStorage
+    };
   },
   methods: {
     goToLogin() {
@@ -96,10 +98,12 @@ export default {
       this.role = "guest"; // Reset role to guest
       this.userName = ""; // Clear user name
       this.$router.push("/"); // Redirect to Home
+      location.reload(); // Reload the page for immediate UI update
     },
   },
 };
 </script>
+
 
 
 <style scoped>
