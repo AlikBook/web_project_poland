@@ -37,12 +37,12 @@
       <!-- Authentication Section -->
       <div class="right_section__buttons">
         <!-- Guest -->
-        <div v-if="role === 'guest'">
+        <div v-if="role === 'guest'" class="right_section__buttons_box">
           <button @click="goToLogin">Login</button>
           <button @click="goToRegister">Register</button>
         </div>
         <!-- User and Admin -->
-        <div v-else>
+        <div v-else class="user_logged_buttons">
           <span>{{ userName }}</span>
           <button @click.prevent="logout">Logout</button>
         </div>
@@ -229,6 +229,17 @@ export default {
   color: black;
 }
 
+
+.user_logged_buttons{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.right_section__buttons_box{
+  display: flex;
+  gap: 10px
+}
 @media (max-width: 800px) {
   .menu {
     flex-direction: column;
@@ -247,11 +258,14 @@ export default {
 
   .right_section__buttons {
     display: flex;
-    gap: 5px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
   }
   .routers {
     padding-left: 5px;
     padding-right: 5px;
   }
+  
 }
 </style>
