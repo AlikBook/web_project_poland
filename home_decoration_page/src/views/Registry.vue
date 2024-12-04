@@ -1,51 +1,63 @@
 <template>
-    <div class="auth-container">
-      <h1>Register</h1>
-      <form class="auth-form" @submit.prevent="registerUser">
-        <input
-          v-model="username"
-          type="text"
-          placeholder="Username"
-          class="auth-input"
-          required
-        />
-        <input
-          v-model="email"
-          type="email"
-          placeholder="Email"
-          class="auth-input"
-          required
-        />
-        <input
-          v-model="password"
-          type="password"
-          placeholder="Password"
-          class="auth-input"
-          required
-        />
-        <button type="submit" class="auth-button">Register</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        username: "",
-        email: "",
-        password: "",
-      };
+  <div class="auth-container">
+    <h1>Register</h1>
+    <form class="auth-form" @submit.prevent="registerUser">
+      <input
+        v-model="username"
+        type="text"
+        placeholder="Username"
+        class="auth-input"
+        required
+      />
+      <input
+        v-model="email"
+        type="email"
+        placeholder="Email"
+        class="auth-input"
+        required
+      />
+      <input
+        v-model="password"
+        type="password"
+        placeholder="Password"
+        class="auth-input"
+        required
+      />
+      <button type="submit" class="auth-button">Register</button>
+    </form>
+  </div>
+</template>
+
+<script>
+import apiClient from "../services/apiService";
+
+export default {
+  data() {
+    return {
+      username: "",
+      email: "",
+      password: "",
+    };
+  },
+  methods: {
+    async registerUser() {
+      try {
+        const response = await apiClient.post("/auth/register", {
+          username: this.username,
+          email: this.email,
+          password: this.password,
+        });
+        alert("User registered successfully! You can now log in.");
+        this.$router.push("/login"); // Redirect to login page
+      } catch (error) {
+        console.error("Registration failed:", error.response?.data?.message || error.message);
+        alert(error.response?.data?.message || "Registration failed!");
+      }
     },
-    methods: {
-      registerUser() {
-        // Logic for register
-        console.log("Register attempted", this.username, this.email, this.password);
-      },
-    },
-  };
-  </script>
-  
+  },
+};
+</script>
+
   <style scoped>
   .auth-container {
     width: 100%;
