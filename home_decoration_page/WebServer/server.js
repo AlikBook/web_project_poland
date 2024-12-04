@@ -45,7 +45,7 @@ async function initial() {
 
 // Test database connection and sync tables
 db.sequelize
-  .sync({ force: false }) // Use `force: true` only for resetting the database during development
+  .sync({ force: true }) // Use `force: true` only for resetting the database during development
   .then(() => {
     console.log("Database synchronized successfully!");
     initial(); // Seed roles after syncing database
