@@ -23,7 +23,7 @@ exports.register = (req, res) => {
         });
       } else {
         user.setRoles([1]).then(() => {
-          res.send({ message: "User registered successfully!" });
+          res.send({ message: "Admin registered successfully!" });
         });
       }
     })

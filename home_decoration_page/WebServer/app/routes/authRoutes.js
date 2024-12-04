@@ -13,4 +13,17 @@ router.post(
 // Login route
 router.post("/login", authController.signin);
 
+router.delete("/users", (req, res) => {
+  User.destroy({
+    where: {}, // Deletes all rows
+    truncate: true, // Optional: Resets primary key auto-increment
+  })
+    .then(() => {
+      res.send({ message: "All users were deleted successfully!" });
+    })
+    .catch((err) => {
+      res.status(500).send({ message: "Error deleting all users." });
+    });
+});
+
 module.exports = router;
