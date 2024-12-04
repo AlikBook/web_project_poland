@@ -9,7 +9,7 @@ const products = [
     price: 200,
     quantity_cart: 0,
     category: "Beds",
-    ratings: [],
+    ratings: [5, 4, 5],
   },
   {
     product_name: "Modern Bed",
@@ -19,7 +19,7 @@ const products = [
     price: 300,
     quantity_cart: 0,
     category: "Beds",
-    ratings: [],
+    ratings: [4, 3],
   },
 
   // Furniture
@@ -31,7 +31,7 @@ const products = [
     price: 50,
     quantity_cart: 0,
     category: "Furniture",
-    ratings: [],
+    ratings: [4, 1],
   },
   {
     product_name: "Wooden Chair",
@@ -41,7 +41,7 @@ const products = [
     price: 150,
     quantity_cart: 0,
     category: "Furniture",
-    ratings: [],
+    ratings: [3, 4, 2],
   },
 
   // Decoration
@@ -53,7 +53,7 @@ const products = [
     price: 100,
     quantity_cart: 0,
     category: "Decoration",
-    ratings: [],
+    ratings: [3, 4, 5],
   },
   {
     product_name: "Elegant Vase",
@@ -63,7 +63,7 @@ const products = [
     price: 70,
     quantity_cart: 0,
     category: "Decoration",
-    ratings: [],
+    ratings: [2, 4, 1],
   },
 
   // Storage
@@ -75,7 +75,7 @@ const products = [
     price: 40,
     quantity_cart: 0,
     category: "Storage",
-    ratings: [],
+    ratings: [5, 4, 5],
   },
   {
     product_name: "Storage Box",
@@ -85,7 +85,7 @@ const products = [
     price: 120,
     quantity_cart: 0,
     category: "Storage",
-    ratings: [],
+    ratings: [3, 4, 3],
   },
 
   // Home
@@ -97,7 +97,7 @@ const products = [
     price: 200,
     quantity_cart: 0,
     category: "Home",
-    ratings: [],
+    ratings: [5, 4, 5],
   },
   {
     product_name: "Modern Couch",
@@ -107,7 +107,7 @@ const products = [
     price: 50,
     quantity_cart: 0,
     category: "Home",
-    ratings: [],
+    ratings: [5, 4, 4],
   },
   {
     product_name: "Modern Vase",
@@ -117,7 +117,7 @@ const products = [
     price: 100,
     quantity_cart: 0,
     category: "Home",
-    ratings: [],
+    ratings: [5, 4, 5],
   },
   {
     product_name: "Shelf",
@@ -127,27 +127,36 @@ const products = [
     price: 40,
     quantity_cart: 0,
     category: "Home",
-    ratings: [],
+    ratings: [5, 4, 4],
   },
 ];
 
 const seedProducts = async () => {
   try {
-    await db.sequelize.sync(); // Ensure the database schema is ready
+    await db.sequelize.authenticate(); // Ensure database connection
+    console.log("Connection to the database has been established successfully.");
 
-    // Delete all existing products
+    // Add the 'ratings' column if it doesn't exist
+    await db.sequelize.query(`
+      ALTER TABLE Products
+      ADD COLUMN IF NOT EXISTS ratings JSON;
+    `);
+    console.log("Ensured 'ratings' column exists in the 'Products' table.");
+
+    // Clear existing products
     await db.products.destroy({ where: {}, truncate: true });
     console.log("Existing products cleared from the database.");
 
-    // Insert new products
+    // Seed new products
     await db.products.bulkCreate(products);
     console.log("New products have been added to the database!");
 
-    process.exit(); // Exit the script
+    process.exit(0); // Exit the process successfully
   } catch (error) {
     console.error("Error seeding products:", error);
-    process.exit(1); // Exit with an error
+    process.exit(1); // Exit the process with an error
   }
 };
+
 
 seedProducts();

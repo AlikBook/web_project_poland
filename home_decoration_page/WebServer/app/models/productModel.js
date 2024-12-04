@@ -36,5 +36,17 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  // Before creating or updating, set default value for ratings if null
+  Product.beforeCreate((product) => {
+    if (!product.ratings) {
+      product.ratings = [];
+    }
+  });
+  Product.beforeUpdate((product) => {
+    if (!product.ratings) {
+      product.ratings = [];
+    }
+  });
+
   return Product;
 };
