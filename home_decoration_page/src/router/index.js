@@ -81,14 +81,14 @@ const router = createRouter({
  routes
 })
 
+// Route Guards
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("user");
 
-  // Decode the token to get user details
   let user = null;
   if (token) {
     try {
-      user = JSON.parse(atob(token.split(".")[1]));
+      user = JSON.parse(atob(token.split(".")[1])); // Decode the token to extract user data
     } catch (error) {
       console.error("Invalid token:", error);
       localStorage.removeItem("user");
@@ -101,6 +101,13 @@ router.beforeEach((to, from, next) => {
     if (!token) {
       return next("/login"); // Redirect to login if not authenticated
     }
+
+    if (to.meta.role && user && user.roles) {
+      const hasRole = user.roles.includes(to.meta.role);
+      if (!hasRole) {
+        return next("/"); // Redirect to home if the user lacks the required role
+      }
+    }
     return next();
   }
 
@@ -112,18 +119,7 @@ router.beforeEach((to, from, next) => {
     return next();
   }
 
-  // If route is for admin-only
-  if (to.matched.some((record) => record.meta.role === "admin")) {
-    if (!user || user.role !== "admin") {
-      return next("/"); // Redirect to home if not an admin
-    }
-    return next();
-  }
-
   next(); // Allow navigation if no guard is triggered
 });
 
-export default createRouter({
-  history: createWebHistory(),
-  routes,
-});
+export default router;

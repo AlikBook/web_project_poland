@@ -5,6 +5,7 @@ const config = require("../config/auth.config");
 const User = db.user;
 const Role = db.role;
 
+
 exports.register = (req, res) => {
   console.log("Request Body for Registration:", req.body); // Debug log
   User.create({
@@ -34,56 +35,48 @@ exports.register = (req, res) => {
     });
 };
 
-exports.signin = (req, res) => {
-  console.log("Request Body for Login:", req.body); // Debug log
-  User.findOne({
-    where: { username: req.body.username },
-  })
-    .then((user) => {
-      if (!user) {
-        return res.status(404).send({ message: "User not found." });
-      }
+exports.signin = async (req, res) => {
+  try {
+    console.log("Request Body for Login:", req.body); // Debug log
 
-      const passwordIsValid = bcrypt.compareSync(
-        req.body.password,
-        user.password
-      );
+    // Find user by username
+    const user = await User.findOne({ where: { username: req.body.username } });
 
-      if (!passwordIsValid) {
-        return res.status(401).send({
-          accessToken: null,
-          message: "Invalid password!",
-        });
-      }
+    if (!user) {
+      return res.status(404).send({ message: "User not found." });
+    }
 
-      const token = jwt.sign({ id: user.id }, config.secret, {
-        expiresIn: 86400, // 24 hours
+    // Validate password
+    const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+
+    if (!passwordIsValid) {
+      return res.status(401).send({
+        accessToken: null,
+        message: "Invalid password!",
       });
+    }
 
-      // Properly declare and initialize `authorities`
-      let authorities = [];
-      user
-        .getRoles()
-        .then((roles) => {
-          for (let i = 0; i < roles.length; i++) {
-            authorities.push("ROLE_" + roles[i].name.toUpperCase());
-          }
+    // Generate token
+    const token = jwt.sign({ id: user.id }, config.secret, { expiresIn: 86400 }); // 24 hours
 
-          res.status(200).send({
-            id: user.id,
-            username: user.username,
-            email: user.email,
-            roles: authorities,
-            accessToken: token,
-          });
-        })
-        .catch((err) => {
-          console.error("Error fetching roles:", err.message); // Debug log
-          res.status(500).send({ message: "Error fetching user roles." });
-        });
-    })
-    .catch((err) => {
-      console.error("Error during login:", err.message); // Debug log
-      res.status(500).send({ message: err.message });
+    // Fetch roles and determine primary role
+    const roles = await user.getRoles();
+    const authorities = roles.map((role) => role.name); // Extract role names
+    const role = authorities.includes("admin") ? "admin" : "user"; // Determine main role
+
+    console.log("Roles for user:", authorities);
+    console.log("Primary role:", role);
+    // Send response
+    res.status(200).send({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      roles: authorities, // All roles
+      role, // Primary role
+      accessToken: token,
     });
+  } catch (err) {
+    console.error("Error during login:", err.message);
+    res.status(500).send({ message: err.message });
+  }
 };
