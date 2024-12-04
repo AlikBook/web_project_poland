@@ -5,28 +5,32 @@
         <!-- Common Links for All Roles -->
         <router-link to="/" class="routers">Home</router-link>
 
-        <!-- User-Specific Links -->
-        <router-link v-if="role === 'user'" to="/productlist" class="routers">Product List</router-link>
-        <router-link v-if="role === 'user'" to="/cart" class="routers">Cart</router-link>
-
         <!-- Admin-Specific Links -->
-        <router-link v-if="role === 'admin'" to="/manage-products" class="routers">Manage Products</router-link>
-        <router-link v-if="role === 'admin'" to="/manage-users" class="routers">Manage Users</router-link>
+        <router-link v-if="role === 'guest'" to="/products" class="routers">Product Management</router-link>
+        <router-link v-if="role === 'guest'" to="/users" class="routers">User Management</router-link>
+
+        <!-- User-Specific Links -->
+        <router-link v-if="role === 'guest'" to="/productlist" class="routers">Product List</router-link>
+        <router-link v-if="role === 'guest'" to="/cart" class="routers">Cart</router-link>
       </div>
     </div>
+
     <div class="menu_right_section">
-      <router-link to="/cart" class="cart">
+      <!-- Cart Section for Users -->
+      <template v-if="role === 'user'">
+        <router-link to="/cart" class="cart">
+          <div class="items_menu">
+            <font-awesome-icon :icon="['fas', 'cart-shopping']" />
+            <p>Cart</p>
+          </div>
+        </router-link>
         <div class="items_menu">
-          <font-awesome-icon :icon="['fas', 'cart-shopping']" />
-          <p>Cart</p>
+          {{ number_Cart_Items }} <p>Items</p>
         </div>
-      </router-link>
-      <div class="items_menu">
-        {{ number_Cart_Items }} <p>Items</p>
-      </div>
-      <div class="items_menu">
-        {{ totalPrice }}$ <p>Total Amount</p>
-      </div>
+        <div class="items_menu">
+          {{ totalPrice }}$ <p>Total Amount</p>
+        </div>
+      </template>
 
       <!-- Authentication Section -->
       <div class="right_section__buttons">
@@ -60,15 +64,23 @@ export default {
     },
   },
   data() {
-    return {
-      role: localStorage.getItem("role") || "guest", // Get user role from localStorage
-      userName: localStorage.getItem("userName") || "", // Get user name from localStorage
-    };
-  },
-  computed: {
-    isLoggedIn() {
-      return this.role !== "guest"; // User is logged in if role is not 'guest'
-    },
+    const token = localStorage.getItem("user");
+  let role = "guest";
+
+  if (token) {
+    try {
+      const user = JSON.parse(atob(token.split(".")[1])); // Decode the token
+      role = user.role; // Assign role from token payload
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      localStorage.removeItem("user");
+    }
+  }
+
+  return {
+    role: role, // Set the role from the decoded token
+    userName: localStorage.getItem("userName") || "", // Get username from localStorage
+  };
   },
   methods: {
     goToLogin() {
@@ -88,6 +100,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 * {
