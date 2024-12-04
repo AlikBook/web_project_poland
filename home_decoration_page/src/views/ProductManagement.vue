@@ -3,7 +3,7 @@
     <h1>Product Management</h1>
 
     <!-- Form to Create a New Product (Visible to Admin Only) -->
-    <div >
+    <div v-if="isAdmin" >
       <form @submit.prevent="createProduct">
         <input
           type="text"
