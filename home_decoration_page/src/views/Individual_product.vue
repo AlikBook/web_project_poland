@@ -116,7 +116,7 @@ export default {
 
   
 
-  <style scoped>
+<style scoped>
 .product_details_page{
     width: 100%;
     background-color: #EAEDED;
