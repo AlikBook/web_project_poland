@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     blocked: {
       type: DataTypes.BOOLEAN,
+      allowNull: false,
       defaultValue: false, // Default: user is not blocked
     },
   });
