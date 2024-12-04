@@ -66,25 +66,29 @@ export default {
     },
   },
   data() {
-    const token = localStorage.getItem("user");
-    let role = "guest";
+  const token = localStorage.getItem("user");
+  let role = "guest";
 
-    if (token) {
-      try {
-        const user = JSON.parse(atob(token.split(".")[1])); // Decode the token
-        role = user.roles && user.roles.includes("admin") ? "admin" : "user"; // Determine role
-      } catch (error) {
-        console.error("Error decoding token:", error);
-        localStorage.removeItem("user");
-      }
+  if (token) {
+    try {
+      const user = JSON.parse(atob(token.split(".")[1])); // Decode the token
+      console.log("Decoded token:", user); // Debug log
+      role = user.roles.includes("admin") ? "admin" : "user"; // Check roles array
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      localStorage.removeItem("user");
     }
+  }
 
-    return {
-      role: role, // Set the role based on the token
-      userName: localStorage.getItem("userName") || "", // Get username from localStorage
-    };
-  },
+  return {
+    role: role, // Set the role based on the token
+    userName: localStorage.getItem("userName") || "", // Get username from localStorage
+  };
+},
   methods: {
+    giverole() {
+      console.log("Primary role:", this.role);
+    },
     goToLogin() {
       this.$router.push("/login"); // Navigate to Login page
     },
