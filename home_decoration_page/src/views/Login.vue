@@ -1,42 +1,61 @@
 <template>
-    <div class="auth-container">
-      <h1>Login</h1>
-      <form class="auth-form" @submit.prevent="loginUser">
-        <input
-          v-model="username"
-          type="text"
-          placeholder="Username"
-          class="auth-input"
-          required
-        />
-        <input
-          v-model="password"
-          type="password"
-          placeholder="Password"
-          class="auth-input"
-          required
-        />
-        <button type="submit" class="auth-button">Login</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        username: "",
-        password: "",
-      };
+  <div class="auth-container">
+    <h1>Login</h1>
+    <form class="auth-form" @submit.prevent="loginUser">
+      <input
+        v-model="username"
+        type="text"
+        placeholder="Username"
+        class="auth-input"
+        required
+      />
+      <input
+        v-model="password"
+        type="password"
+        placeholder="Password"
+        class="auth-input"
+        required
+      />
+      <button type="submit" class="auth-button">Login</button>
+    </form>
+  </div>
+</template>
+
+<script>
+import apiClient from "../services/apiService";
+
+export default {
+  data() {
+    return {
+      username: "",
+      password: "",
+    };
+  },
+  methods: {
+    async loginUser() {
+      try {
+        const response = await apiClient.post("/auth/login", {
+          username: this.username,
+          password: this.password,
+        });
+
+        const { accessToken, roles, username } = response.data;
+
+        // Store user details in localStorage
+        localStorage.setItem("user", accessToken);
+        localStorage.setItem("role", roles[0]); // Assuming roles is an array
+        localStorage.setItem("userName", username);
+
+        alert("Login successful!");
+        this.$router.push("/"); // Redirect to home page
+      } catch (error) {
+        console.error("Login failed:", error.response?.data?.message || error.message);
+        alert(error.response?.data?.message || "Login failed!");
+      }
     },
-    methods: {
-      loginUser() {
-        // Logic for login
-        console.log("Login attempted", this.username, this.password);
-      },
-    },
-  };
-  </script>
+  },
+};
+</script>
   
   <style scoped>
   .auth-container {
