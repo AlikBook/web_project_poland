@@ -301,6 +301,7 @@
 
 
 
+
   @media (max-width: 800px){
     .single_product{
       flex-direction: column;
