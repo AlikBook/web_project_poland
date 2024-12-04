@@ -6,6 +6,7 @@ const Role = db.role; // Access the Role model
 // Import routes
 const authRoutes = require("./app/routes/authRoutes"); 
 const productRoutes = require("./app/routes/productRoutes");
+const userRoutes = require("./app/routes/userRoutes"); // Import user routes
 
 // Import the seedAdmin function
 const seedAdmin = require("./seedAdmin");
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 // Use routes
 app.use("/auth", authRoutes); // Routes for authentication
 app.use("/api/products", productRoutes); // Product routes (adjusted path)
+app.use("/api/users", userRoutes); // Use the routes with the base path "/api/users"
 
 // Define the initial function to seed roles
 async function initial() {
