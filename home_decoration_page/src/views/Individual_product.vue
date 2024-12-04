@@ -1,22 +1,75 @@
 <template>
-    <div class="product_details_page">
-        <div class="product_container">
-            <img :src="product.img" alt="Product Image" />
-            <div class="product_details">
-                <h1>{{ product.product_name }}</h1>
-                <hr>
-                <p class="category">Category: {{ product.category }}</p>
-                <h2>Price: {{ product.price }} $</h2>
-                <p class="description">Description:</p>
-                <p>{{ product.description }} </p>
-                <button @click="addToCart">Add to Cart</button>
-            </div>
-        </div>
-        
+  <div class="product_details_page">
+    <div v-if="!product">Loading product details...</div>
+    <div v-else class="product_container">
+      <img :src="product.img" alt="Product Image" />
+      <div class="product_details">
+        <h1>{{ product.product_name }}</h1>
+        <hr />
+        <p class="category">Category: {{ product.category }}</p>
+        <h2>Price: {{ product.price }} $</h2>
+        <p class="description">Description:</p>
+        <p>{{ product.description }}</p>
+        <button @click="addToCart">Add to Cart</button>
+      </div>
     </div>
+  </div>
 </template>
   
-<style scoped>
+<script>
+export default {
+  name: "IndividualProduct",
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      product: null,
+    };
+  },
+  created() {
+    this.fetchProductOnLoad();
+  },
+  methods: {
+    async fetchProductOnLoad() {
+      const productId = parseInt(this.id, 10);
+      if (this.$root.products.length) {
+        this.fetchProduct(productId);
+      }
+    },
+    async fetchProduct(productId) {
+      const product = this.$root.products?.find((item) => item.id === productId);
+      if (product) {
+        this.product = product;
+      } else {
+        console.error("Product not found");
+      }
+    },
+  },
+  watch: {
+    '$root.products': {
+      immediate: true,
+      handler(newProducts) {
+        if (newProducts.length && !this.product) {
+          const productId = parseInt(this.id, 10);
+          this.fetchProduct(productId);
+        }
+      },
+    },
+    id(newId) {
+      const productId = parseInt(newId, 10);
+      this.fetchProduct(productId);
+    },
+  },
+};
+</script>
+
+  
+
+  <style scoped>
 .product_details_page{
     width: 100%;
     background-color: #EAEDED;
@@ -85,32 +138,3 @@ hr{
 
 }
 </style>
-
-<script>
-  export default {
-    name: "IndividualProduct",
-    props: {
-      id: {
-        type: String,
-        required: true,
-      },
-    },
-    data() {
-      return {
-        product: null,
-      };
-    },
-    created() {
-      const productId = parseInt(this.id, 10);
-      this.product = this.$root.products.find((item) => item.id === productId);
-    },
-    methods: {
-      addToCart() {
-        this.$root.add_product_to_cart(this.product);
-      },
-    },
-  };
-  </script>
-  
-
-  
