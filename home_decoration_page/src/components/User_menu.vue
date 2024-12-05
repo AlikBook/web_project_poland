@@ -68,12 +68,16 @@ export default {
   data() {
   const token = localStorage.getItem("user");
   let role = "guest";
+  let blocked = false;
+  let userName = "";
 
   if (token) {
     try {
       const user = JSON.parse(atob(token.split(".")[1])); // Decode the token
       console.log("Decoded token:", user); // Debug log
-      role = user.roles.includes("admin") ? "admin" : "user"; // Check roles array
+      blocked = user.blocked || false; // Check if the user is blocked
+      role = blocked ? "guest" : user.roles.includes("admin") ? "admin" : "user";
+      userName = localStorage.getItem("userName") || "";
     } catch (error) {
       console.error("Error decoding token:", error);
       localStorage.removeItem("user");

@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     blocked: {
       type: DataTypes.BOOLEAN,
-      
       defaultValue: false, // Default: user is not blocked
     },
   });
@@ -30,10 +29,11 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  // Define the getRoles function
-  User.prototype.getRoles = async function () {
-    const roles = await this.getRoles(); // Fetch roles via the association
-    return roles.map((role) => role.name); // Map role objects to their names
+  // Define the fetchRoles function to avoid recursion
+  User.prototype.fetchRoles = async function () {
+    // Use Sequelize's auto-generated method getRoles to fetch associated roles
+    const roles = await this.getRoles();
+    return roles.map((role) => role.name); // Return an array of role names
   };
 
   return User;
