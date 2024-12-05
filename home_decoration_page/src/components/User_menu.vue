@@ -2,11 +2,14 @@
   <nav class="menu">
     <div class="menu_pages">
       <div class="menu_pages__links">
+        <!-- Common Links for All Roles -->
         <router-link to="/" class="routers">Home</router-link>
 
+        <!-- Admin-Specific Links -->
         <router-link v-if="role === 'admin'" to="/products" class="routers">Product Management</router-link>
         <router-link v-if="role === 'admin'" to="/users" class="routers">User Management</router-link>
 
+        <!-- User-Specific Links -->
         <router-link v-if="role === 'user'" to="/storage" class="routers">Storage</router-link>
         <router-link v-if="role === 'user'" to="/furniture" class="routers">Furniture</router-link>
         <router-link v-if="role === 'user'" to="/beds" class="routers">Beds</router-link>
@@ -15,6 +18,7 @@
     </div>
 
     <div class="menu_right_section">
+      <!-- Cart Section for Users -->
       <template v-if="role === 'user'">
         <router-link to="/cart" class="cart">
           <div class="items_menu">
@@ -30,11 +34,14 @@
         </div>
       </template>
 
+      <!-- Authentication Section -->
       <div class="right_section__buttons">
+        <!-- Guest -->
         <div v-if="role === 'guest'" class="right_section__buttons_box">
           <button @click="goToLogin">Login</button>
           <button @click="goToRegister">Register</button>
         </div>
+        <!-- User and Admin -->
         <div v-else class="user_logged_buttons">
           <span>{{ userName }}</span>
           <button @click.prevent="logout">Logout</button>
@@ -61,12 +68,16 @@ export default {
   data() {
   const token = localStorage.getItem("user");
   let role = "guest";
+  let blocked = false;
+  let userName = "";
 
   if (token) {
     try {
-      const user = JSON.parse(atob(token.split(".")[1]));
-      console.log("Decoded token:", user);
-      role = user.roles.includes("admin") ? "admin" : "user";
+      const user = JSON.parse(atob(token.split(".")[1])); // Decode the token
+      console.log("Decoded token:", user); // Debug log
+      blocked = user.blocked || false; // Check if the user is blocked
+      role = blocked ? "guest" : user.roles.includes("admin") ? "admin" : "user";
+      userName = localStorage.getItem("userName") || "";
     } catch (error) {
       console.error("Error decoding token:", error);
       localStorage.removeItem("user");
@@ -74,8 +85,8 @@ export default {
   }
 
   return {
-    role: role,
-    userName: localStorage.getItem("userName") || "",
+    role: role, // Set the role based on the token
+    userName: localStorage.getItem("userName") || "", // Get username from localStorage
   };
 },
   methods: {
@@ -83,19 +94,19 @@ export default {
       console.log("Primary role:", this.role);
     },
     goToLogin() {
-      this.$router.push("/login");
+      this.$router.push("/login"); // Navigate to Login page
     },
     goToRegister() {
-      this.$router.push("/register");
+      this.$router.push("/register"); // Navigate to Register page
     },
     logout() {
-      localStorage.removeItem("user");
+      localStorage.removeItem("user"); // Remove user data
       localStorage.removeItem("role");
       localStorage.removeItem("userName");
-      this.role = "guest";
-      this.userName = ""; 
-      this.$router.push("/");
-      location.reload();
+      this.role = "guest"; // Reset role to guest
+      this.userName = ""; // Clear user name
+      this.$router.push("/"); // Redirect to Home
+      location.reload(); // Reload the page for immediate UI update
     },
   },
 };
