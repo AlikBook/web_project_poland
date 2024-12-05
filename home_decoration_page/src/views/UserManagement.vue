@@ -1,11 +1,10 @@
 <template>
   <div class="user-management">
     <h1>User Management</h1>
-
     <ul>
       <li v-for="user in nonAdminUsers" :key="user.id">
-        {{ user.username }} ({{ user.email }})
-        <button @click="toggleBlockUser(user.id, user.blocked)">
+        <span>{{ user.username }} ({{ user.email }})</span>
+        <button @click="toggleBlockUser(user)">
           {{ user.blocked ? "Unblock" : "Block" }}
         </button>
       </li>
@@ -26,10 +25,13 @@ export default {
   computed: {
     // Filter out admin users
     nonAdminUsers() {
-      return this.users.filter((user) => !user.roles.includes("admin"));
+      return this.users.filter((user) => {
+        return user.roles && !user.roles.includes("admin");
+      });
     },
   },
   methods: {
+    // Fetch users from the backend
     async fetchUsers() {
       try {
         this.users = await UserService.getAllUsers();
@@ -37,16 +39,20 @@ export default {
         console.error("Error fetching users:", error);
       }
     },
-    async toggleBlockUser(id, isBlocked) {
+    // Toggle the blocked state of a user
+    async toggleBlockUser(user) {
       try {
-        if (isBlocked) {
-          await UserService.unblockUser(id); // Unblock user
+        if (user.blocked) {
+          await UserService.unblockUser(user.id); // Unblock user
         } else {
-          await UserService.blockUser(id); // Block user
+          await UserService.blockUser(user.id); // Block user
         }
-        this.fetchUsers(); // Refresh user list
+        user.blocked = !user.blocked; // Update the blocked state locally
       } catch (error) {
-        console.error(`Error ${isBlocked ? "unblocking" : "blocking"} user:`, error);
+        console.error(
+          `Error ${user.blocked ? "unblocking" : "blocking"} user:`,
+          error
+        );
       }
     },
   },
@@ -55,6 +61,10 @@ export default {
   },
 };
 </script>
+
+
+
+
 
 <style scoped>
 /* Add any required styling */
