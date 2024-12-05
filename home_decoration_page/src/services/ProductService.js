@@ -1,11 +1,11 @@
-import axios from "axios";
+import apiClient from "./apiService";
 
-const API_URL = "http://localhost:5000/api/products";
+const API_URL = "/api/products"; // Base URL is already defined in apiClient
 
 // Fetch all products (Public)
 const getAllProducts = async () => {
   try {
-    const response = await axios.get(API_URL);
+    const response = await apiClient.get(API_URL);
     return response.data;
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -16,7 +16,7 @@ const getAllProducts = async () => {
 // Fetch a product by ID (Public)
 const getProductById = async (id) => {
   try {
-    const response = await axios.get(`${API_URL}/${id}`);
+    const response = await apiClient.get(`${API_URL}/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching product details:", error);
@@ -27,12 +27,11 @@ const getProductById = async (id) => {
 // Create a new product (Admin Only)
 const createProduct = async (product) => {
   try {
-    const response = await axios.post(API_URL, product, {
-      headers: { "x-access-token": localStorage.getItem("token") }, // Pass token in headers
-    });
+    console.log("Sending product data:", product); // Debugging log
+    const response = await apiClient.post(API_URL, product);
     return response.data;
   } catch (error) {
-    console.error("Error creating product:", error);
+    console.error("Error creating product:", error.response?.data || error.message);
     throw error;
   }
 };
@@ -40,9 +39,7 @@ const createProduct = async (product) => {
 // Update a product by ID (Admin Only)
 const updateProduct = async (id, product) => {
   try {
-    const response = await axios.put(`${API_URL}/${id}`, product, {
-      headers: { "x-access-token": localStorage.getItem("token") }, // Pass token in headers
-    });
+    const response = await apiClient.put(`${API_URL}/${id}`, product);
     return response.data;
   } catch (error) {
     console.error("Error updating product:", error);
@@ -53,9 +50,7 @@ const updateProduct = async (id, product) => {
 // Delete a product by ID (Admin Only)
 const deleteProduct = async (id) => {
   try {
-    const response = await axios.delete(`${API_URL}/${id}`, {
-      headers: { "x-access-token": localStorage.getItem("token") }, // Pass token in headers
-    });
+    const response = await apiClient.delete(`${API_URL}/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error deleting product:", error);
@@ -66,9 +61,7 @@ const deleteProduct = async (id) => {
 // Delete all products (Admin Only)
 const deleteAllProducts = async () => {
   try {
-    const response = await axios.delete(API_URL, {
-      headers: { "x-access-token": localStorage.getItem("token") }, // Include token for admin verification
-    });
+    const response = await apiClient.delete(API_URL);
     return response.data;
   } catch (error) {
     console.error("Error deleting all products:", error);
@@ -79,13 +72,7 @@ const deleteAllProducts = async () => {
 // Add a rating to a product (Public)
 const addRating = async (id, rating) => {
   try {
-    const response = await axios.post(
-      `${API_URL}/${id}/rating`,
-      { rating },
-      {
-        headers: { "x-access-token": localStorage.getItem("token") }, // Optional: if rating requires auth
-      }
-    );
+    const response = await apiClient.post(`${API_URL}/${id}/rating`, { rating });
     return response.data;
   } catch (error) {
     console.error("Error submitting rating:", error);

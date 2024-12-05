@@ -4,37 +4,81 @@
     <div class="Form_div">
       <form @submit.prevent="createProduct">
         <label for="product_name">Product Name</label>
-        <input type="text" id="product_name" v-model="newProduct.product_name" placeholder="Product Name" required/>
+        <input
+          type="text"
+          id="product_name"
+          v-model="newProduct.product_name"
+          placeholder="Product Name"
+          required
+        />
 
         <label for="description">Product Description</label>
-        <textarea id="description" v-model="newProduct.description" placeholder="Product Description" required></textarea>
+        <textarea
+          id="description"
+          v-model="newProduct.description"
+          placeholder="Product Description"
+          required
+        ></textarea>
 
         <label for="img">Product Image URL</label>
-        <input type="text" id="img" v-model="newProduct.img" placeholder="Product Image URL"/>
+        <input
+          type="text"
+          id="img"
+          v-model="newProduct.img"
+          placeholder="Product Image URL"
+        />
 
         <label for="quantity_available">Quantity Available</label>
-        <input type="number" id="quantity_available" v-model="newProduct.quantity_available" placeholder="Quantity Available" min="0"/>
+        <input
+          type="number"
+          id="quantity_available"
+          v-model="newProduct.quantity_available"
+          placeholder="Quantity Available"
+          min="0"
+        />
 
         <label for="price">Price</label>
-        <input type="number" id="price" v-model="newProduct.price" placeholder="Price" step="0.01" min="0"/>
+        <input
+          type="number"
+          id="price"
+          v-model="newProduct.price"
+          placeholder="Price"
+          step="0.01"
+          min="0"
+        />
 
         <label for="category">Category</label>
-        <input type="text" id="category" v-model="newProduct.category" placeholder="Category"/>
-    
+        <select v-model="newProduct.category" id="category" required>
+          <option value="" disabled>Select Category</option>
+          <option value="bed">Bed</option>
+          <option value="storage">Storage</option>
+          <option value="furniture">Furniture</option>
+          <option value="decorations">Decorations</option>
+          placeholder="Category"
+        </select>
+
         <div class="button_box">
           <button type="submit">Add Product</button>
-          <button @click="deleteAllProducts" class="delete-all-button">
-              Delete All Products
-            </button>
+          <button
+           
+            @click.prevent="deleteAllProducts"
+            class="delete-all-button"
+          >
+            Delete All Products
+          </button>
         </div>
       </form>
     </div>
-    
+
     <div class="list_of_products">
       <h2>Existing Products</h2>
       <hr />
       <ul class="product_container">
-        <li v-for="product in products" :key="product.id" class="single_product">
+        <li
+          v-for="product in products"
+          :key="product.id"
+          class="single_product"
+        >
           <img :src="product.img" alt="Product Image" /> <br />
           <div class="single_product_details">
             <p><strong>ID:</strong> {{ product.id }}</p>
@@ -44,20 +88,18 @@
             <p><strong>Category:</strong> {{ product.category }}</p>
             <p><strong>Quantity Available:</strong> {{ product.quantity_available }}</p>
           </div>
-          
-          <div class="single_product_buttons_box">
+
+          <div class="single_product_buttons_box" >
             <button @click="deleteProduct(product.id)">Delete</button>
             <button @click="editProduct(product)">Edit</button>
           </div>
         </li>
       </ul>
     </div>
-    
 
     <div v-if="editingProduct" class="edit_product">
-      
       <h3>Edit Product</h3>
-      <hr>
+      <hr />
       <form @submit.prevent="updateProduct">
         <label for="edit_product_name">Product Name</label>
         <input
@@ -68,8 +110,8 @@
           required
         />
 
-  <label for="edit_description">Product Description</label>
-  <textarea
+        <label for="edit_description">Product Description</label>
+        <textarea
           id="edit_description"
           v-model="editingProduct.description"
           placeholder="Product Description"
@@ -104,18 +146,105 @@
         />
 
         <label for="edit_category">Category</label>
-        <input
-          type="text"
-          id="edit_category"
-          v-model="editingProduct.category"
+        <select v-model="editingProduct.category" id="edit_category" required>
+          <option value="bed">Bed</option>
+          <option value="storage">Storage</option>
+          <option value="furniture">Furniture</option>
+          <option value="decorations">Decorations</option>
           placeholder="Category"
-        />
+        </select>
 
         <button type="submit">Update Product</button>
       </form>
     </div>
   </div>
 </template>
+
+<script>
+import ProductService from "../services/ProductService";
+
+export default {
+  name: "ProductManagement",
+  data() {
+    return {
+      products: [],
+      newProduct: {
+        product_name: "",
+        description: "",
+        img: "",
+        quantity_available: null,
+        price: null,
+        category: "",
+      },
+      editingProduct: null,
+      isAdmin: false,
+    };
+  },
+  methods: {
+    async fetchProducts() {
+      try {
+        this.products = await ProductService.getAllProducts();
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    },
+    async createProduct() {
+      try {
+        await ProductService.createProduct(this.newProduct);
+        this.resetForm();
+        this.fetchProducts();
+      } catch (error) {
+        console.error("Error creating product:", error.response?.data || error.message);
+      }
+    },
+    async deleteProduct(id) {
+      try {
+        await ProductService.deleteProduct(id);
+        this.fetchProducts();
+      } catch (error) {
+        console.error("Error deleting product:", error.response?.data || error.message);
+      }
+    },
+    async deleteAllProducts() {
+      try {
+        await ProductService.deleteAllProducts();
+        this.fetchProducts();
+      } catch (error) {
+        console.error("Error deleting all products:", error.response?.data || error.message);
+      }
+    },
+    editProduct(product) {
+      this.editingProduct = { ...product };
+    },
+    async updateProduct() {
+      try {
+        await ProductService.updateProduct(this.editingProduct.id, this.editingProduct);
+        this.editingProduct = null;
+        this.fetchProducts();
+      } catch (error) {
+        console.error("Error updating product:", error.response?.data || error.message);
+      }
+    },
+    resetForm() {
+      this.newProduct = {
+        product_name: "",
+        description: "",
+        img: "",
+        quantity_available: null,
+        price: null,
+        category: "",
+      };
+    },
+  },
+  mounted() {
+    this.fetchProducts();
+    const role = localStorage.getItem("role");
+    this.isAdmin = role === "admin";
+  },
+};
+</script>
+
+
 
 <style scoped>
   .product-management{
@@ -318,93 +447,3 @@
 
   }
 </style>
-
-<script>
-import ProductService from "../services/ProductService";
-
-export default {
-  product_name: "ProductManagement",
-  data() {
-    return {
-      products: [],
-      newProduct: {
-        product_name: "",
-        description: "",
-        img: "",
-        quantity_available: 0,
-        price: 0.0,
-        category: "",
-      },
-      editingProduct: null, // The product currently being edited
-      isAdmin: false, // Determines if the current user is an admin
-    };
-  },
-  methods: {
-    // Fetch the list of products
-    async fetchProducts() {
-      try {
-        this.products = await ProductService.getAllProducts();
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    },
-    // Create a new product (Admin Only)
-    async createProduct() {
-      try {
-        await ProductService.createProduct(this.newProduct);
-        this.newProduct = {
-          product_name: "",
-          description: "",
-          img: "",
-          quantity_available: 0,
-          price: 0.0,
-          category: "",
-        }; // Reset form
-        this.fetchProducts(); // Refresh the product list
-      } catch (error) {
-        console.error("Error creating product:", error);
-      }
-    },
-    // Delete a product (Admin Only)
-    async deleteProduct(id) {
-      try {
-        await ProductService.deleteProduct(id);
-        this.fetchProducts(); // Refresh the product list
-      } catch (error) {
-        console.error("Error deleting product:", error);
-      }
-    },
-    // Delete all products (Admin Only)
-    async deleteAllProducts() {
-      try {
-        await ProductService.deleteAllProducts();
-        this.fetchProducts(); // Refresh the product list
-      } catch (error) {
-        console.error("Error deleting all products:", error);
-      }
-    },
-    // Edit a product (Admin Only)
-    editProduct(product) {
-      this.editingProduct = { ...product }; // Clone the product to avoid modifying the list directly
-    },
-    // Update a product (Admin Only)
-    async updateProduct() {
-      try {
-        await ProductService.updateProduct(this.editingProduct.id, this.editingProduct);
-        this.editingProduct = null; // Clear the editing form
-        this.fetchProducts(); // Refresh the product list
-      } catch (error) {
-        console.error("Error updating product:", error);
-      }
-    },
-  },
-  mounted() {
-    this.fetchProducts(); // Fetch products on component mount
-
-    // Check if the current user is an admin using localStorage
-    const role = localStorage.getItem("role");
-    this.isAdmin = role === "admin"; // Set admin status based on role
-  },
-};
-</script>
-
