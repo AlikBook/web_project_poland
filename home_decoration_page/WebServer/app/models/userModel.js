@@ -30,5 +30,11 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
+  // Define the getRoles function
+  User.prototype.getRoles = async function () {
+    const roles = await this.getRoles(); // Fetch roles via the association
+    return roles.map((role) => role.name); // Map role objects to their names
+  };
+
   return User;
 };
