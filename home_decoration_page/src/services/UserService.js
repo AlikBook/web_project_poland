@@ -1,18 +1,42 @@
-import axios from "axios";
-
-const API_URL = "http://localhost:5000/api/users";
+import apiClient from "./apiService";
 
 export default {
-  getAllUsers: async () => {
-    const response = await axios.get(API_URL);
-    return response.data;
+  // Get all users (Excludes admin users)
+  getAllUsers() {
+    return apiClient.get("/api/users", {
+      headers: {
+        "x-access-token": localStorage.getItem("user"), // Include token from localStorage
+      },
+    }).then((response) => {
+      // Filter out users with the admin role
+      return response.data.filter(user => user.role !== "admin");
+    }).catch((error) => {
+      console.error("Error fetching users:", error);
+      throw error;
+    });
   },
-  blockUser: async (id) => {
-    const response = await axios.post(`${API_URL}/${id}/block`);
-    return response.data;
+
+  // Block a user (Admin Only)
+  blockUser(id) {
+    return apiClient.put(`/api/users/block/${id}`, null, {
+      headers: {
+        "x-access-token": localStorage.getItem("user"), // Include token
+      },
+    }).catch((error) => {
+      console.error("Error blocking user:", error);
+      throw error;
+    });
   },
-  unblockUser: async (id) => {
-    const response = await axios.post(`${API_URL}/${id}/unblock`);
-    return response.data;
+
+  // Unblock a user (Admin Only)
+  unblockUser(id) {
+    return apiClient.put(`/api/users/unblock/${id}`, null, {
+      headers: {
+        "x-access-token": localStorage.getItem("user"), // Include token
+      },
+    }).catch((error) => {
+      console.error("Error unblocking user:", error);
+      throw error;
+    });
   },
 };
