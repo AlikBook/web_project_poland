@@ -6,10 +6,8 @@
                 Bring your ideas to life with special
                  discounts, inspiration, and exclusive
                   perks. Sign up now — it's free!</p>
-            <div class="right_section__buttons">
-                <button>Login</button>
-                <button>Register</button>
-            </div>
+            
+            
         </div>
         <div class="menu_and_socials">
             <h3>Leaving Already? Don't Miss Our Categories!</h3>
