@@ -41,14 +41,14 @@ const routes = [
         path: "/cart",
         name : "Cart",
         component: Cart ,
-        meta: { requiresAuth: true }, // Protected route
+        meta: { requiresAuth: true }, 
     },
     {
-        path: "/product/:id", // Add dynamic route for the product
+        path: "/product/:id", 
         name: "Individual_product",
         component: Individual_product,
-        props: true, // Enable passing the route parameter as props
-        meta: { requiresAuth: true }, // Protected route
+        props: true, 
+        meta: { requiresAuth: true }, 
       },
       {
         path: "/register",
@@ -76,10 +76,14 @@ const routes = [
       },
       
 ]
+
 const router = createRouter({
- history: createWebHistory(),
- routes
-})
+  history: createWebHistory(),
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 };
+  }
+});
 
 // Route Guards
 router.beforeEach((to, from, next) => {

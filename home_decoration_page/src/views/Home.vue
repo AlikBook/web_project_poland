@@ -16,23 +16,27 @@
         of your dreams.
       </h2>
       <div class="category-container">
-        <div class="category">
-          <img src="/imgs/image-e312bbe9c6d348c5bb980207e0701bd4.webp" alt="Storage" />
-          <div class="category-overlay">Storage</div>
-        </div>
-        <div class="category">
-          <img src="/imgs/Furniture.webp" alt="Furniture" />
-          <div class="category-overlay">Furniture</div>
-        </div>
-        <div class="category">
-          <img src="/imgs/Beds.jpg" alt="Beds" />
-          <div class="category-overlay">Beds</div>
-        </div>
-        <div class="category">
-          <img src="/imgs/Decoration.webp" alt="Decoration" />
-          <div class="category-overlay">Decoration</div>
-        </div>
-      </div>
+  <router-link to="/storage" class="category">
+    <img src="/imgs/image-e312bbe9c6d348c5bb980207e0701bd4.webp" alt="Storage" />
+    <div class="category-overlay">Storage</div>
+  </router-link>
+
+  <router-link to="/furniture" class="category">
+    <img src="/imgs/Furniture.webp" alt="Furniture" />
+    <div class="category-overlay">Furniture</div>
+  </router-link>
+
+  <router-link to="/beds" class="category">
+    <img src="/imgs/Beds.jpg" alt="Beds" />
+    <div class="category-overlay">Beds</div>
+  </router-link>
+
+  <router-link to="/decoration" class="category">
+    <img src="/imgs/Decoration.webp" alt="Decoration" />
+    <div class="category-overlay">Decoration</div>
+  </router-link>
+</div>
+
     </div>
     <h2 class="Home_catalog">Explore our catalog</h2>
     <Catalog_product :add_product_to_cart="add_product_to_cart" :products="products" :Page_category="Page_category" />
