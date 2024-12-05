@@ -27,7 +27,7 @@
     },
     data() {
       return {
-        Page_category: "Decoration", // Set the category specific to this page
+        Page_category: "Decoration",
       };
     },
   };
