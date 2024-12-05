@@ -130,18 +130,11 @@ const products = [
     ratings: [5, 4, 4],
   },
 ];
-
 const seedProducts = async () => {
   try {
-    await db.sequelize.authenticate(); // Ensure database connection
+    // Ensure database connection
+    await db.sequelize.authenticate();
     console.log("Connection to the database has been established successfully.");
-
-    // Add the 'ratings' column if it doesn't exist
-    await db.sequelize.query(`
-      ALTER TABLE Products
-      ADD COLUMN IF NOT EXISTS ratings JSON;
-    `);
-    console.log("Ensured 'ratings' column exists in the 'Products' table.");
 
     // Clear existing products
     await db.products.destroy({ where: {}, truncate: true });
@@ -157,6 +150,5 @@ const seedProducts = async () => {
     process.exit(1); // Exit the process with an error
   }
 };
-
 
 seedProducts();
