@@ -40,7 +40,7 @@ export default {
         });
 
         const { accessToken, role, username, blocked } = response.data;
-        if (!blocked) {
+        if (blocked) {
           alert(`${username}, your account has been blocked by the admin.`);
           // Treat as a guest, even after logging in
           localStorage.setItem("role", "guest");
